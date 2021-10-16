@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
@@ -13,25 +13,27 @@ type Props = {
 }
 
 export const SubHeader: FC<Props> = ({ options }) => {
-  const { title } = options;
   const theme = useTheme();
   const { headerY } = useContext(HeaderContext);
+  const { title, headerRight } = options;
 
   const wrapperAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: HEADER_HEIGHT - headerY.value }]
+    marginTop: HEADER_HEIGHT - headerY.value
   }));
 
   return (
     <Animated.View style={[styles.wrapper(theme), wrapperAnimatedStyle]}>
-      <Text style={styles.title}>
-        {title}
-      </Text>
+      <Text style={styles.title}>{title}</Text>
+      {headerRight && <View style={styles.right}>{headerRight()}</View>}
     </Animated.View>
   );
 };
 
 const styles = StyleSheet.create<any>({
   wrapper: ({ colors }: PaperTheme) => ({
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingTop: 4,
     paddingHorizontal: 16,
     width: '100%',
@@ -44,5 +46,10 @@ const styles = StyleSheet.create<any>({
     fontSize: fontSizes.sceneTitle,
     textTransform: 'uppercase',
     letterSpacing: -1
+  },
+  right: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end'
   }
 });
