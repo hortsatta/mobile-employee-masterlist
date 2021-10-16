@@ -32,6 +32,8 @@ type PaperTheme = Omit<Theme, 'colors'> & {
     sceneTitle: number;
     text: number;
     label: number;
+    menuTitle: number;
+    button: number;
   };
 };
 

@@ -39,7 +39,9 @@ const fontConfig: { [platform: string]: Fonts } = {
 const fontSizes = {
   sceneTitle: 20,
   text: 12,
-  label: 14
+  menuTitle: 13,
+  label: 14,
+  button: 15
 };
 
 export { fontAssets, fontConfig, fontSizes };
