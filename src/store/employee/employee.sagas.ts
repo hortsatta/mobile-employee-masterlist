@@ -24,8 +24,8 @@ import {
   fetchPreviousPageEmployeesSuccess,
   fetchInitialPageEmployeesSuccess,
   fetchPageEmployeesFailure,
-  updateEmployeeFailure,
-  updateEmployeeSuccess
+  refreshEmployeeFailure,
+  refreshEmployeeSuccess
 } from './employee.actions';
 import { selectLastLoadedEmployee } from './employee.selectors';
 
@@ -35,7 +35,7 @@ const fetchPageEmployees = (payload: any, pageMode?: PageMode, docKey?: string) 
   return getPageEmployees(pageCursor, sortBy, isActive);
 };
 
-function* updateEmployeeWorker(action: PayloadAction<string>): SagaIterator<void> {
+function* refreshEmployeeWorker(action: PayloadAction<string>): SagaIterator<void> {
   try {
     const employee = yield call(getEmployeeById, action.payload);
     const picture = employee?.personalInfo.picture || null;
@@ -48,9 +48,9 @@ function* updateEmployeeWorker(action: PayloadAction<string>): SagaIterator<void
       draft.personalInfo.pictureFull = pictureFull;
     });
 
-    yield put(updateEmployeeSuccess(employee.id, updatedEmployee));
+    yield put(refreshEmployeeSuccess(employee.id, updatedEmployee));
   } catch (error: any) {
-    yield put(updateEmployeeFailure());
+    yield put(refreshEmployeeFailure());
     yield put(appendNotificationMessages({
       status: error.name.toLowerCase(),
       message: error.message
@@ -188,10 +188,10 @@ function* onFetchNewestEmployeeStart() {
   );
 }
 
-function* onUpdateEmployeeStart() {
+function* onRefreshEmployeeStart() {
   yield takeLatest(
-    EmployeeActionType.UPDATE_EMPLOYEE_START,
-    updateEmployeeWorker
+    EmployeeActionType.REFRESH_EMPLOYEE_START,
+    refreshEmployeeWorker
   );
 }
 
@@ -202,6 +202,6 @@ export function* employeeSagas(): unknown {
     call(onFetchPreviousPageEmployeesStart),
     call(onFetchNextPageEmployeesStart),
     call(onFetchNewestEmployeeStart),
-    call(onUpdateEmployeeStart)
+    call(onRefreshEmployeeStart)
   ]);
 }

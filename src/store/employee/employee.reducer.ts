@@ -14,7 +14,7 @@ import {
   fetchNewestEmployeeStart,
   fetchNewestEmployeeFailure,
   fetchPageEmployeesFailure,
-  updateEmployeeSuccess,
+  refreshEmployeeSuccess,
   setSelectedEmployee
 } from './employee.actions';
 import { employeeAdapter, initialState } from './employee.state';
@@ -24,7 +24,7 @@ export const employeeReducer = createReducer(initialState, builder => (
     .addCase(setSelectedEmployee, (state, action) => {
       state.selectedEmployeeId = action.payload;
     })
-    .addCase(updateEmployeeSuccess, (state, action) => {
+    .addCase(refreshEmployeeSuccess, (state, action) => {
       const { id, changes } = action.payload;
       employeeAdapter.updateOne(state, { id, changes });
     })

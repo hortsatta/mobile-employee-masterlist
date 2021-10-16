@@ -18,9 +18,9 @@ export enum EmployeeActionType {
   FETCH_NEXT_PAGE_EMPLOYEES_SUCCESS = '[Employee] Fetch Next Page Employees Success',
   FETCH_PAGE_EMPLOYEES_FAILURE = '[Employee] Fetch Next Page Employees Failure',
   // Update employee
-  UPDATE_EMPLOYEE_START = '[Employee] Update Employee Start',
-  UPDATE_EMPLOYEE_SUCCESS = '[Employee] Update Employee Success',
-  UPDATE_EMPLOYEE_FAILURE = '[Employee] Update Employee Failure',
+  REFRESH_EMPLOYEE_START = '[Employee] Refresh Employee Start',
+  REFRESH_EMPLOYEE_SUCCESS = '[Employee] Refresh Employee Success',
+  REFRESH_EMPLOYEE_FAILURE = '[Employee] Refresh Employee Failure',
   // Set selected Employee
   SET_SELECTED_EMPLOYEE = '[Employee] Set Selected Employee'
 }
@@ -88,18 +88,18 @@ const fetchPageEmployeesFailure = createAction(
   EmployeeActionType.FETCH_PAGE_EMPLOYEES_FAILURE
 );
 
-const updateEmployeeStart = createAction(
-  EmployeeActionType.UPDATE_EMPLOYEE_START,
+const refreshEmployeeStart = createAction(
+  EmployeeActionType.REFRESH_EMPLOYEE_START,
   (id: string) => ({ payload: id })
 );
 
-const updateEmployeeSuccess = createAction(
-  EmployeeActionType.UPDATE_EMPLOYEE_SUCCESS,
+const refreshEmployeeSuccess = createAction(
+  EmployeeActionType.REFRESH_EMPLOYEE_SUCCESS,
   (id: string, changes: Record<string, any>) =>({ payload: { id, changes } })
 );
 
-const updateEmployeeFailure = createAction(
-  EmployeeActionType.UPDATE_EMPLOYEE_FAILURE
+const refreshEmployeeFailure = createAction(
+  EmployeeActionType.REFRESH_EMPLOYEE_FAILURE
 );
 
 const setSelectedEmployee = createAction(
@@ -121,8 +121,8 @@ export {
   fetchNextPageEmployeesStart,
   fetchNextPageEmployeesSuccess,
   fetchPageEmployeesFailure,
-  updateEmployeeStart,
-  updateEmployeeSuccess,
-  updateEmployeeFailure,
+  refreshEmployeeStart,
+  refreshEmployeeSuccess,
+  refreshEmployeeFailure,
   setSelectedEmployee
 };
