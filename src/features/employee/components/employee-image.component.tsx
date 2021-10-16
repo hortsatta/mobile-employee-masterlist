@@ -32,6 +32,15 @@ const Placeholder: FC<PlaceholderProps> = ({ isMale, width, height }) => (
     : <FemalePlaceholderSvg width={width || SVG_WIDTH} height={height || SVG_HEIGHT} />
 );
 
+const PressableImage: FC<{ onPress?: () => void; }> = ({ onPress, children }) => (
+  onPress
+    ? (
+      <Pressable onPress={onPress}>
+        {children}
+      </Pressable>
+    ) : <>{children}</>
+);
+
 export const EmployeeImage: FC<Props> = ({
   wrapperStyle,
   style,
@@ -43,19 +52,21 @@ export const EmployeeImage: FC<Props> = ({
 }) => (
 
   <Animated.View style={[styles.wrapper, !imageUrl && styles.placeholder, wrapperStyle]}>
-    <Pressable onPress={imageUrl ? onPress : undefined}>
-      {
-        imageUrl
-          ? <Image style={[styles.image, style]} source={{ uri: imageUrl as any }} />
-          : (
-            <Placeholder
-              isMale={gender.toLowerCase() === Gender.MALE}
-              width={placeholderWidth}
-              height={placeholderHeight}
-            />
-          )
-      }
-    </Pressable>
+    {
+      imageUrl
+        ? (
+          <PressableImage onPress={onPress}>
+            <Image style={[styles.image, style]} source={{ uri: imageUrl as any }} />
+          </PressableImage>
+        )
+        : (
+          <Placeholder
+            isMale={gender.toLowerCase() === Gender.MALE}
+            width={placeholderWidth}
+            height={placeholderHeight}
+          />
+        )
+    }
   </Animated.View>
 
 );
