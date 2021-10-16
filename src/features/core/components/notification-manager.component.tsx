@@ -1,4 +1,4 @@
-import React, { ComponentProps, FC, ReactNode, useEffect, useState } from 'react';
+import React, { ComponentProps, FC, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Snackbar } from 'react-native-paper';
 
@@ -10,7 +10,6 @@ type Props = Omit<ComponentProps<typeof Snackbar>, 'visible' | 'onDismiss' | 'ch
   notificationMessages: NotificationMessage[];
   visible?: boolean;
   onDismiss?: () => void;
-  children?: ReactNode;
 }
 
 export const NotificationManager: FC<Props> = ({ notificationMessages, visible, onDismiss, ...moreProps }) => {

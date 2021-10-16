@@ -5,7 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { darkColors } from 'config/core';
+import { darkColors, fontSizes } from 'config/core';
 import { AuthCredential } from 'models';
 import { Button, Icon, IconName, Text, TextInput } from 'features/core/components';
 import { ErrorMessage } from 'helpers';
@@ -157,14 +157,14 @@ const styles = StyleSheet.create({
   input: {
     top: -8,
     color: darkColors.text,
-    fontSize: 15
+    fontSize: fontSizes.button
   },
   emailInputWrapper: {
     marginBottom: 24
   },
   submitText: {
     color: darkColors.text,
-    fontSize: 15
+    fontSize: fontSizes.button
   },
   divider: {
     marginVertical: 18,

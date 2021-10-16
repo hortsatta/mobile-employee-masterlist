@@ -15,6 +15,7 @@ export const TextInput: FC<ComponentProps<typeof FilledTextField>> = ({ style, l
       labelTextStyle={[styles.label, labelTextStyle]}
       tintColor={theme.colors.primary}
       baseColor={theme.colors.placeholder}
+      lineWidth={1}
       {...moreProps}
     />
   );
@@ -24,7 +25,11 @@ const styles = StyleSheet.create<any>({
   inputContainer: ({ colors }: PaperTheme) => ({
     paddingBottom: 4,
     height: 50,
-    backgroundColor: colors.surface
+    backgroundColor: colors.surface,
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderColor: 'rgba(0,0,0,0.2)'
   }),
   input: ({ fonts, fontSizes }: PaperTheme) => ({
     fontFamily: fonts.regular.fontFamily,
