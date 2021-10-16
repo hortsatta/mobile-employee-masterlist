@@ -186,6 +186,27 @@ const getPageEmployees = async (
 
 };
 
+const getEmployeesByKeyword = async (keyword: string, isActive = true): Promise<Employee[] | null> => {
+  try {
+    const snapshots = await firestore
+      .collection(FirestoreCollectionName.EMPLOYEES)
+      .where(IS_ACTIVE, '==', isActive)
+      .where('personalInfo.firstName', '>=', keyword)
+      .get();
+
+    const employees: any = snapshots.docs
+      .map(async snapshot => {
+        const subCollections = await getEmployeeSubCollections(snapshot);
+        const employee = await transformEmployeeSnapshot(snapshot, subCollections);
+        return employee; })
+      .filter(e => !!e);
+
+    return Promise.all(employees);
+  } catch (error) {
+    throw new Error(ErrorMessage.SERVER);
+  }
+};
+
 const getNewestEmployee = async (): Promise<Employee | null> => {
   try {
     const snapshots = await firestore
@@ -236,6 +257,7 @@ export {
   getEmployeeFullPicture,
   getAllEmployees,
   getPageEmployees,
+  getEmployeesByKeyword,
   getNewestEmployee,
   getEmployeeById,
   getTotalEmployeeCount
