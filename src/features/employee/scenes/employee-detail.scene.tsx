@@ -1,14 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Route } from '@react-navigation/routers';
 import Animated, {
   useAnimatedScrollHandler,
-  useSharedValue
+  useSharedValue,
+  runOnJS,
+  useAnimatedStyle
 } from 'react-native-reanimated';
 
-import { selectSelectedEmployee, updateEmployeeStart } from 'store/employee';
+import { selectSelectedEmployee, refreshEmployeeStart } from 'store/employee';
 import { EmployeeCoverImage, EmployeeDetail } from '../components';
 
 type Props = {
@@ -23,7 +25,7 @@ export const EmployeeDetailScene: FC<Props> = ({ route }) => {
   const [isScrolling, setIsScrolling] = useState(false);
 
   useEffect(() => {
-    dispatch(updateEmployeeStart(id));
+    dispatch(refreshEmployeeStart(id));
   }, [dispatch, id]);
 
   const handleScroll = useAnimatedScrollHandler({
@@ -31,20 +33,27 @@ export const EmployeeDetailScene: FC<Props> = ({ route }) => {
       scrollY.value = event.contentOffset.y;
     },
     onMomentumBegin: () => {
-      !isScrolling && setIsScrolling(true);
+      !isScrolling && runOnJS(setIsScrolling)(true);
     },
     onMomentumEnd: () => {
-      isScrolling && setIsScrolling(false);
+      isScrolling && runOnJS(setIsScrolling)(false);
     }
   });
+
+  const coverImageAnimatedStyle = useAnimatedStyle(() => ({
+    width: '100%',
+    position: 'absolute',
+    top: scrollY.value * -0.15
+  }));
 
   return (
     <>
       <View>
-        <EmployeeCoverImage
-          style={styles.coverImage}
-          departmentId={selectedEmployee?.department?.departmentId || ''}
-        />
+        <Animated.View style={coverImageAnimatedStyle}>
+          <EmployeeCoverImage
+            departmentId={selectedEmployee?.department?.departmentId || ''}
+          />
+        </Animated.View>
         <Animated.ScrollView
           scrollEventThrottle={16}
           onScroll={handleScroll}
@@ -62,11 +71,3 @@ export const EmployeeDetailScene: FC<Props> = ({ route }) => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  coverImage: {
-    position: 'absolute',
-    top: 0,
-    width: '100%'
-  }
-});
