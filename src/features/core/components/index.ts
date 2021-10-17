@@ -1,3 +1,4 @@
+export * from './active-filters-header.component';
 export * from './avatar-button.component';
 export * from './button.component';
 export * from './context-menu.component';
