@@ -10,6 +10,7 @@ import {
 import { ErrorMessage } from 'helpers';
 import {
   Employee,
+  EmployeePageKey,
   EmployeePersonalInfo,
   PageCursor,
   PageMode,
@@ -186,12 +187,21 @@ const getPageEmployees = async (
 
 };
 
-const getEmployeesByKeyword = async (keyword: string, isActive = true): Promise<Employee[] | null> => {
+const getEmployeesByKeyword = async (
+  keyword: string,
+  fieldKey: EmployeePageKey,
+  sortBy: SortBy,
+  isActive = true
+): Promise<Employee[] | null> => {
+
   try {
+    const FIRST_NAME = 'personalInfo.firstName';
     const snapshots = await firestore
       .collection(FirestoreCollectionName.EMPLOYEES)
       .where(IS_ACTIVE, '==', isActive)
-      .where('personalInfo.firstName', '>=', keyword)
+      .where(FIRST_NAME, '>=', keyword)
+      .orderBy(FIRST_NAME, SortBy.ASC)
+      .orderBy(fieldKey, sortBy)
       .get();
 
     const employees: any = snapshots.docs
@@ -202,9 +212,10 @@ const getEmployeesByKeyword = async (keyword: string, isActive = true): Promise<
       .filter(e => !!e);
 
     return Promise.all(employees);
-  } catch (error) {
+  } catch (error) { console.log(error);
     throw new Error(ErrorMessage.SERVER);
   }
+
 };
 
 const getNewestEmployee = async (): Promise<Employee | null> => {

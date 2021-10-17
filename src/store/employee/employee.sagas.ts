@@ -10,7 +10,8 @@ import {
   getNewestEmployee,
   getPageEmployees,
   getEmployeeFullPicture,
-  getEmployeeById
+  getEmployeeById,
+  getEmployeesByKeyword
 } from 'services';
 import { appendNotificationMessages } from 'store/core';
 import { DEBOUNCE_DURATION } from 'features/core/hooks';
@@ -18,6 +19,8 @@ import {
   EmployeeActionType,
   fetchAllEmployeesFailure,
   fetchAllEmployeesSuccess,
+  fetchEmployeesByKeywordFailure,
+  fetchEmployeesByKeywordSuccess,
   fetchNewestEmployeeFailure,
   fetchNewestEmployeeSuccess,
   fetchNextPageEmployeesSuccess,
@@ -67,6 +70,22 @@ function* allEmployeesStartWorker(): SagaIterator<void> {
     yield put(fetchAllEmployeesSuccess(employees, totalCount));
   } catch (error: any) {
     yield put(fetchAllEmployeesFailure());
+    yield put(appendNotificationMessages({
+      status: error.name.toLowerCase(),
+      message: error.message
+    }));
+  }
+}
+
+function* employeesByKeywordStartWorker(action: PayloadAction<Record<string, any>>): SagaIterator<void> {
+  try {
+    const { keyword, fieldKey, sortBy, isActive } = action.payload;
+    const employees = yield call(getEmployeesByKeyword, keyword, fieldKey, sortBy, isActive);
+
+    yield delay(DEBOUNCE_DURATION);
+    yield put(fetchEmployeesByKeywordSuccess(employees));
+  } catch (error: any) {
+    yield put(fetchEmployeesByKeywordFailure());
     yield put(appendNotificationMessages({
       status: error.name.toLowerCase(),
       message: error.message
@@ -160,6 +179,13 @@ function* onFetchAllEmployeesStart() {
   );
 }
 
+function* onFetchEmployeesByKeywordStart() {
+  yield takeLatest(
+    EmployeeActionType.FETCH_EMPLOYEES_BY_KEYWORD_START,
+    employeesByKeywordStartWorker
+  );
+}
+
 function* onFetchInitialPageEmployeesStart() {
   yield takeLatest(
     EmployeeActionType.FETCH_INITIAL_PAGE_EMPLOYEES_START,
@@ -198,6 +224,7 @@ function* onRefreshEmployeeStart() {
 export function* employeeSagas(): unknown {
   yield all([
     call(onFetchAllEmployeesStart),
+    call(onFetchEmployeesByKeywordStart),
     call(onFetchInitialPageEmployeesStart),
     call(onFetchPreviousPageEmployeesStart),
     call(onFetchNextPageEmployeesStart),

@@ -3,6 +3,9 @@ import { createReducer, isAnyOf } from '@reduxjs/toolkit';
 import {
   fetchAllEmployeesFailure,
   fetchAllEmployeesSuccess,
+  fetchEmployeesByKeywordFailure,
+  fetchEmployeesByKeywordStart,
+  fetchEmployeesByKeywordSuccess,
   fetchAllEmployeesStart,
   fetchInitialPageEmployeesStart,
   fetchNextPageEmployeesStart,
@@ -40,6 +43,11 @@ export const employeeReducer = createReducer(initialState, builder => (
 
       return employeeAdapter.setAll(state, employees);
     })
+    .addCase(fetchEmployeesByKeywordSuccess, (state, action) => {
+      state.loading = false;
+      state.currentPage = 0;
+      return employeeAdapter.setAll(state, action.payload);
+    })
     .addCase(fetchInitialPageEmployeesSuccess, (state, action) => {
       const { employees, totalCount } = action.payload;
 
@@ -59,13 +67,16 @@ export const employeeReducer = createReducer(initialState, builder => (
       state.currentPage && ++state.currentPage;
       return employeeAdapter.upsertMany(state, action.payload);
     })
-    .addCase(fetchInitialPageEmployeesStart, state => {
-      state.loading = true;
-      state.currentPage = undefined;
-    })
     .addCase(fetchPageEmployeesFailure, state => {
       state.pageLoading = false;
     })
+    .addMatcher(
+      isAnyOf(fetchInitialPageEmployeesStart, fetchEmployeesByKeywordStart),
+      state => {
+        state.loading = true;
+        state.currentPage = undefined;
+      }
+    )
     .addMatcher(
       isAnyOf(fetchNewestEmployeeStart, fetchAllEmployeesStart),
       state => { state.loading = true; }
@@ -75,7 +86,11 @@ export const employeeReducer = createReducer(initialState, builder => (
       state => { state.pageLoading = true; }
     )
     .addMatcher(
-      isAnyOf(fetchAllEmployeesFailure, fetchNewestEmployeeFailure),
+      isAnyOf(
+        fetchAllEmployeesFailure,
+        fetchEmployeesByKeywordFailure,
+        fetchNewestEmployeeFailure
+      ),
       state => { state.loading = false; }
     )
     .addDefaultCase(state => state)

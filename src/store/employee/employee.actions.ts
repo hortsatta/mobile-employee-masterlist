@@ -5,6 +5,10 @@ export enum EmployeeActionType {
   FETCH_ALL_EMPLOYEES_START = '[Employee] Fetch All Employees Start',
   FETCH_ALL_EMPLOYEES_SUCCESS = '[Employee] Fetch All Employees Success',
   FETCH_ALL_EMPLOYEES_FAILURE = '[Employee] Fetch All Employees Failure',
+  // For searching
+  FETCH_EMPLOYEES_BY_KEYWORD_START = '[Employee] Fetch Employees By Keyword Start',
+  FETCH_EMPLOYEES_BY_KEYWORD_SUCCESS = '[Employee] Fetch Employees By Keyword Success',
+  FETCH_EMPLOYEES_BY_KEYWORD_FAILURE = '[Employee] Fetch Employees By Keyword Failure',
   // For newly hired employee
   FETCH_NEWEST_EMPLOYEE_START = '[Employee] Fetch Newest Employee Start',
   FETCH_NEWEST_EMPLOYEE_SUCCESS = '[Employee] Fetch Newest Employee Success',
@@ -36,6 +40,21 @@ const fetchAllEmployeesSuccess = createAction(
 
 const fetchAllEmployeesFailure = createAction(
   EmployeeActionType.FETCH_ALL_EMPLOYEES_FAILURE
+);
+
+const fetchEmployeesByKeywordStart = createAction(
+  EmployeeActionType.FETCH_EMPLOYEES_BY_KEYWORD_START,
+  (keyword: string, fieldKey: EmployeePageKey, sortBy: SortBy, isActive: boolean) =>
+    ({ payload: { keyword, fieldKey, sortBy, isActive } })
+);
+
+const fetchEmployeesByKeywordSuccess = createAction(
+  EmployeeActionType.FETCH_EMPLOYEES_BY_KEYWORD_SUCCESS,
+  (employees: Employee[]) => ({ payload: employees })
+);
+
+const fetchEmployeesByKeywordFailure = createAction(
+  EmployeeActionType.FETCH_EMPLOYEES_BY_KEYWORD_FAILURE
 );
 
 const fetchNewestEmployeeStart = createAction(
@@ -111,6 +130,9 @@ export {
   fetchAllEmployeesStart,
   fetchAllEmployeesSuccess,
   fetchAllEmployeesFailure,
+  fetchEmployeesByKeywordStart,
+  fetchEmployeesByKeywordSuccess,
+  fetchEmployeesByKeywordFailure,
   fetchNewestEmployeeStart,
   fetchNewestEmployeeSuccess,
   fetchNewestEmployeeFailure,
