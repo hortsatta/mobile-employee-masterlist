@@ -1,11 +1,12 @@
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import React, { FC, useCallback, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { Surface, useTheme } from 'react-native-paper';
+import { Surface } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { Extrapolate, interpolate, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
-import { Employee, PaperTheme } from 'models';
+import { fontSizes } from 'config/core';
+import { Employee } from 'models';
 import { selectAllJobTitleEntities } from 'store/job-title';
 import { Text, TextField } from 'features/core/components';
 import { EmployeeImage } from './employee-image.component';
@@ -20,7 +21,6 @@ const AnimtedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
 export const EmployeeDetail: FC<Props> = ({ employee, scrollY, isScrolling }) => {
   const window = useWindowDimensions();
-  const theme = useTheme();
   const jobTitles = useSelector(selectAllJobTitleEntities);
   const zoom = useSharedValue(0);
   const { hireDate, salary, jobTitle, personalInfo } = employee;
@@ -160,7 +160,7 @@ export const EmployeeDetail: FC<Props> = ({ employee, scrollY, isScrolling }) =>
           <Text style={styles.jobTitle}>{currentJobTitle?.name}</Text>
         </View>
         <View style={styles.section}>
-          <Text style={styles.sectionTitle(theme)}>Work Info</Text>
+          <Text style={styles.sectionTitle}>Work Info</Text>
           <TextField wrapperStyle={styles.textField} label='Date Hired'>
             {hireDate.date}
           </TextField>
@@ -169,7 +169,7 @@ export const EmployeeDetail: FC<Props> = ({ employee, scrollY, isScrolling }) =>
           </TextField>
         </View>
         <View style={styles.section}>
-          <Text style={styles.sectionTitle(theme)}>About Me</Text>
+          <Text style={styles.sectionTitle}>About Me</Text>
           <TextField wrapperStyle={styles.textField} label='Phones'>
             {phones.join(',  ')}
           </TextField>
@@ -202,7 +202,7 @@ export const EmployeeDetail: FC<Props> = ({ employee, scrollY, isScrolling }) =>
   );
 };
 
-const styles = StyleSheet.create<any>({
+const styles = StyleSheet.create({
   header: {
     height: 180,
     width: '100%',
@@ -242,21 +242,20 @@ const styles = StyleSheet.create<any>({
     lineHeight: 25
   },
   jobTitle: {
-    fontSize: 15,
+    fontSize: fontSizes.button,
     lineHeight: 20,
-    opacity: 0.5,
     letterSpacing: -0.5
   },
   section: {
     paddingBottom: 8
   },
-  sectionTitle: ({ fonts }: PaperTheme) => ({
+  sectionTitle: {
     marginBottom: 8,
-    fontFamily: fonts.medium.fontFamily,
     textAlign: 'right',
     textTransform: 'uppercase',
-    letterSpacing: -0.5
-  }),
+    letterSpacing: -0.5,
+    opacity: 0.5
+  },
   textField: {
     marginBottom: 12
   }

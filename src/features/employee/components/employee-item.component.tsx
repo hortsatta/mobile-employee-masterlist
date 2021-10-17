@@ -1,14 +1,12 @@
 import React, { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { Pressable, StyleSheet, View, ViewStyle } from 'react-native';
-import { useTheme } from 'react-native-paper';
-import Animated from 'react-native-reanimated';
+import { StyleSheet, View, ViewStyle } from 'react-native';
+import { ActivityIndicator, useTheme } from 'react-native-paper';
 
 import { Employee, PaperTheme } from 'models';
 import { fontSizes } from 'config/core';
 import { selectAllDepartmentEntities } from 'store/department';
 import { selectAllJobTitleEntities } from 'store/job-title';
-import { useAnimatedScale } from 'features/core/hooks';
 import { Text } from 'features/core/components';
 import { EmployeeImage } from './employee-image.component';
 
@@ -16,12 +14,11 @@ type Props = {
   item: Employee;
   index: number;
   style?: ViewStyle;
-  onPress?: () => void;
+  loading?: boolean;
 }
 
-export const EmployeeItem: FC<Props> = ({ style, item, index, onPress }) => {
+export const EmployeeItem: FC<Props> = ({ style, item, index, loading }) => {
   const theme = useTheme();
-  const { scaleAnimatedStyle, animateScale } = useAnimatedScale();
   const departments = useSelector(selectAllDepartmentEntities);
   const jobTitles = useSelector(selectAllJobTitleEntities);
   const { personalInfo, department, jobTitle } = item;
@@ -36,30 +33,27 @@ export const EmployeeItem: FC<Props> = ({ style, item, index, onPress }) => {
     jobTitle && jobTitles[jobTitle.titleId]
   ), [jobTitles, jobTitle]);
 
-  const handlePress = () => {
-    if (!onPress) { return; }
-    animateScale();
-    onPress();
-  };
-
   return (
-    <Pressable onPress={handlePress}>
-      <Animated.View style={[styles.wrapper(theme), style, scaleAnimatedStyle]}>
-        <EmployeeImage
-          wrapperStyle={styles.imageWrapper}
-          imageUrl={pictureThumb}
-          gender={gender}
-        />
-        <View style={styles.titleWrapper}>
-          <Text style={styles.fullName}>{fullName}</Text>
-          <Text style={styles.subText}>{currentDepartment?.alias}</Text>
-          <Text style={styles.subText}>{currentJobTitle?.name}</Text>
+    <View style={[styles.wrapper(theme), style]}>
+      {loading && (
+        <View style={styles.loading}>
+          <ActivityIndicator />
         </View>
-        <View style={styles.indexWrapper}>
-          <Text style={styles.index}>{formattedIndex}</Text>
-        </View>
-      </Animated.View>
-    </Pressable>
+      )}
+      <View style={styles.indexWrapper}>
+        <Text style={styles.index}>{formattedIndex}</Text>
+      </View>
+      <EmployeeImage
+        wrapperStyle={styles.imageWrapper}
+        imageUrl={pictureThumb}
+        gender={gender}
+      />
+      <View style={styles.titleWrapper}>
+        <Text style={styles.fullName}>{fullName}</Text>
+        <Text style={styles.subText}>{currentDepartment?.alias}</Text>
+        <Text style={styles.subText}>{currentJobTitle?.name}</Text>
+      </View>
+    </View>
   );
 };
 
@@ -68,6 +62,7 @@ const styles = StyleSheet.create<any>({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    width: '100%',
     backgroundColor: colors.surface,
     borderColor: '#e5e5e5',
     borderTopWidth: 1,
@@ -95,7 +90,7 @@ const styles = StyleSheet.create<any>({
   indexWrapper: {
     width: 16,
     height: '100%',
-    backgroundColor: '#cccccc'
+    backgroundColor: '#dddddd'
   },
   index: {
     position: 'absolute',
@@ -110,5 +105,14 @@ const styles = StyleSheet.create<any>({
       { rotate: '90deg' },
       { translateX: -15 }
     ]
+  },
+  loading: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    zIndex: 1
   }
 });

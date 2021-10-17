@@ -91,7 +91,7 @@ const EmployeeListFilterOptions: FC<Props> = ({ style, filters, onSubmit }) => {
                     icon={IconName.XMARK}
                     color={theme.colors.text}
                     size={16}
-                    onPress={() => onChange(null)}
+                    onPress={() => onChange('')}
                   />
                 )
               }}
@@ -231,4 +231,4 @@ const styles = StyleSheet.create<any>({
 });
 
 export type { EmployeeFiltersFormData };
-export { EmployeeListFilterOptions };
+export { EmployeeListFilterOptions, pageKeySelectItems };
