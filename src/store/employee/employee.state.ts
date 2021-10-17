@@ -11,12 +11,7 @@ export type EmployeeState = EntityState<Employee> & {
 };
 
 const employeeAdapter = createEntityAdapter<Employee>({
-  selectId: employee => employee.id || '',
-  sortComparer: (a, b) => {
-    const aFullName = a.personalInfo.fullName || '';
-    const bFullName = b.personalInfo.fullName || '';
-    return aFullName.localeCompare(bFullName);
-  }
+  selectId: employee => employee.id || ''
 });
 
 const initialState: EmployeeState = employeeAdapter.getInitialState({
