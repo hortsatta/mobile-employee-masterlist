@@ -11,6 +11,8 @@
     "@expo-google-fonts/poppins": "^0.2.0",
     "@hookform/resolvers": "^2.8.1",
     "@react-native-async-storage/async-storage": "^1.15.8",
+    "@react-native-community/datetimepicker": "3.5.2",
+    "@react-native-picker/picker": "1.16.1",
     "@react-navigation/bottom-tabs": "^6.0.5",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/stack": "^6.0.7",
@@ -21,6 +23,7 @@
     "expo-font": "~9.2.1",
     "expo-linear-gradient": "~9.2.0",
     "expo-linking": "~2.3.1",
+    "expo-random": "~11.2.0",
     "expo-status-bar": "~1.0.4",
     "firebase": "8.2.3",
     "immer": "^9.0.6",
@@ -32,6 +35,7 @@
     "react-native-dotenv": "^3.2.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.4",
+    "react-native-pager-view": "5.0.12",
     "react-native-paper": "^4.9.2",
     "react-native-picker-select": "^8.0.4",
     "react-native-reanimated": "~2.2.0",
@@ -45,8 +49,7 @@
     "reselect": "^4.0.0",
     "rn-material-ui-textfield": "^1.0.5",
     "rn-placeholder": "^3.0.3",
-    "zod": "^3.9.1",
-    "@react-native-picker/picker": "1.16.1"
+    "zod": "^3.9.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
