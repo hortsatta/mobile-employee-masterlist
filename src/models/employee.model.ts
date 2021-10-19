@@ -49,11 +49,14 @@ type Employee = AuditTrail & {
     shortDate: string;
   }
   personalInfo: PersonalInfo;
-  isActive: true;
+  isActive: boolean;
   department?: EmployeeDepartment;
   jobTitle?: EmployeeJobTitle;
   salary?: Salary;
-  pageKey?: EmployeePageKey;
+  pageKey?: {
+    fullName: string;
+    hireDate: string;
+  };
 }
 
 export class EmployeePersonalInfo implements PersonalInfo {

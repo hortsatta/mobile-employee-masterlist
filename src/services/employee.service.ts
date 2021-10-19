@@ -7,9 +7,11 @@ import {
   FirestoreCollectionName,
   FirestoreSubCollectionName
 } from 'config/firebase';
-import { ErrorMessage } from 'helpers';
+import { createId, ErrorMessage } from 'helpers';
 import {
   Employee,
+  EmployeeDepartment,
+  EmployeeJobTitle,
   EmployeePageKey,
   EmployeePersonalInfo,
   PageCursor,
@@ -18,6 +20,7 @@ import {
   Salary,
   SortBy
 } from 'models';
+import { EmployeeFormData } from 'features/employee/scenes';
 import { getDateFromTimestamp } from './firebase.service';
 import { getEmployeeJobTitles } from './job-title.service';
 import { getEmployeeDepartments } from './department.service';
@@ -212,7 +215,7 @@ const getEmployeesByKeyword = async (
       .filter(e => !!e);
 
     return Promise.all(employees);
-  } catch (error) { console.log(error);
+  } catch (error) {
     throw new Error(ErrorMessage.SERVER);
   }
 
@@ -264,6 +267,88 @@ const getTotalEmployeeCount = async (isActive = true): Promise<number> => {
   return snapshots.size;
 };
 
+const createLocalEmployee = async (formData: EmployeeFormData): Promise<Employee> => {
+  const {
+    isActive,
+    hireDate,
+    department: departmentId,
+    jobTitle: jobTitleId,
+    salary: salaryAmount,
+    firstName,
+    lastName,
+    middleInitial,
+    gender,
+    birthDate,
+    currentAddress,
+    homeAddress,
+    phones,
+    emails
+    // picture
+  } = formData;
+
+  const employeeId = await createId();
+
+  const department: EmployeeDepartment = {
+    id: await createId(),
+    departmentId,
+    dateFrom: hireDate.toISOString()
+  };
+
+  const jobTitle: EmployeeJobTitle = {
+    id: await createId(),
+    titleId: jobTitleId,
+    dateFrom: hireDate.toISOString()
+  };
+
+  const salary: Salary = {
+    id: await createId(),
+    salary: salaryAmount || 0,
+    dateFrom: hireDate.toISOString()
+  };
+
+  const personalInfo: PersonalInfo = new EmployeePersonalInfo(
+    firstName,
+    lastName,
+    middleInitial,
+    gender,
+    {
+      date: birthDate.toISOString(),
+      shortDate: dayjs(birthDate).format('MM-DD')
+    },
+    currentAddress,
+    homeAddress,
+    phones.map(phone => phone.value),
+    emails.map(phone => phone.value),
+    null
+  );
+
+  const employee: Employee = {
+    isActive,
+    id: employeeId,
+    hireDate: {
+      date: hireDate.toISOString(),
+      shortDate: dayjs(hireDate).format('MM-DD')
+    },
+    department,
+    jobTitle,
+    salary,
+    // Replace personal info's birth date
+    personalInfo,
+    //   ...personalInfo,
+    //   birthDate: {
+    //     date: birthDate.toISOString(),
+    //     shortDate: dayjs(birthDate).format('MM-DD')
+    //   }
+    // },
+    pageKey: {
+      fullName: `${firstName}_${middleInitial}_${lastName}_${employeeId}`,
+      hireDate: `${dayjs(hireDate).format('YYYY-MM-DD')}_${employeeId}`
+    }
+  };
+
+  return employee;
+};
+
 export {
   getEmployeeFullPicture,
   getAllEmployees,
@@ -271,5 +356,6 @@ export {
   getEmployeesByKeyword,
   getNewestEmployee,
   getEmployeeById,
-  getTotalEmployeeCount
+  getTotalEmployeeCount,
+  createLocalEmployee
 };
