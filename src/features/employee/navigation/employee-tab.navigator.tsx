@@ -82,7 +82,10 @@ export const EmployeeTabNavigator: FC = () => {
       <Tab.Screen
         name={appRoutes.upsertEmployee.path}
         component={UpsertEmployeeScene}
-        options={{ title: appRoutes.upsertEmployee.name }}
+        options={{
+          title: appRoutes.upsertEmployee.name,
+          unmountOnBlur: true
+        }}
       />
       <Tab.Screen
         name={appRoutes.departmentList.path}
