@@ -7,17 +7,18 @@ import { PaperTheme } from 'models';
 
 type Props = ComponentProps<typeof RNPickerSelect> & {
   containerStyle?: ViewStyle;
+  error?: any;
 }
 
-export const PickerSelect: FC<Props> = ({ style, containerStyle, ...moreProps }) => {
+export const PickerSelect: FC<Props> = ({ style, containerStyle, error, ...moreProps }) => {
   const theme = useTheme();
 
   return (
-    <View style={[styles.wrapper(theme), containerStyle]}>
+    <View style={[styles.wrapper(theme), containerStyle, error && styles.error(theme)]}>
       <RNPickerSelect
         style={{
           viewContainer: styles.viewWrapper,
-          placeholder: styles.placeholder(theme),
+          placeholder: styles.placeholder(error, theme),
           inputIOS: styles.input(theme),
           inputAndroid: styles.input(theme),
           ...style
@@ -41,10 +42,14 @@ const styles = StyleSheet.create<any>({
     paddingLeft: 4,
     height: 50
   },
-  placeholder: ({ colors }: PaperTheme) => ({
-    color: colors.placeholder
+  placeholder: (error: boolean, { colors }: PaperTheme) => ({
+    color: error ? colors.error : colors.placeholder
   }),
   input: ({ colors }: PaperTheme) =>  ({
     color: colors.text
+  }),
+  error: ({ colors }: PaperTheme) =>  ({
+    borderBottomWidth: 2,
+    borderBottomColor: colors.error
   })
 });

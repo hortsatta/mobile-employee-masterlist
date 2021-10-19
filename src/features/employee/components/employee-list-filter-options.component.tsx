@@ -46,6 +46,8 @@ const EmployeeListFilterOptions: FC<Props> = ({ style, filters, onSubmit }) => {
     resolver: zodResolver(schema)
   });
 
+  const isAsc = (value: string) => value === SortBy.ASC;
+
   const handleSortToggleChange = (val: string, onChange: any) => {
     if (!val) { return; }
     onChange(val);
@@ -111,6 +113,7 @@ const EmployeeListFilterOptions: FC<Props> = ({ style, filters, onSubmit }) => {
             ({ field: { value, onChange } }) => (
               <PickerSelect
                 containerStyle={styles.select}
+                placeholder={{ label: 'Select Property', value: null }}
                 value={value}
                 items={pageKeySelectItems}
                 onValueChange={onChange}
@@ -122,7 +125,7 @@ const EmployeeListFilterOptions: FC<Props> = ({ style, filters, onSubmit }) => {
           name='sortBy'
           control={control}
           render={
-            ({ field: { onChange, value } }) => (
+            ({ field: { value, onChange } }) => (
               <ToggleButton.Row
                 value={value}
                 onValueChange={val => handleSortToggleChange(val, onChange)}
@@ -131,21 +134,21 @@ const EmployeeListFilterOptions: FC<Props> = ({ style, filters, onSubmit }) => {
                   style={[
                     styles.toggleSort(theme),
                     styles.sortAsc,
-                    (value === SortBy.ASC) && styles.activeSort(theme)
+                    isAsc(value) && styles.activeSort(theme)
                   ]}
                   icon={IconName.ARROW_LIST_ASCENDING}
                   value={SortBy.ASC}
-                  {...(value === SortBy.ASC) && { color: '#fff' }}
+                  {...isAsc(value) && { color: '#fff' }}
                 />
                 <ToggleButton
                   style={[
                     styles.toggleSort(theme),
                     styles.sortDesc,
-                    (value === SortBy.DESC) && styles.activeSort(theme)
+                    !isAsc(value) && styles.activeSort(theme)
                   ]}
                   icon={IconName.ARROW_LIST_DESCENDING}
                   value={SortBy.DESC}
-                  {...(value === SortBy.DESC) && { color: '#fff' }}
+                  {...!isAsc(value) && { color: '#fff' }}
                 />
               </ToggleButton.Row >
             )
@@ -200,7 +203,8 @@ const styles = StyleSheet.create<any>({
     justifyContent: 'space-between'
   },
   activeSort: ({ colors }: PaperTheme) => ({
-    backgroundColor: colors.primary
+    backgroundColor: colors.primary,
+    borderWidth: 0
   }),
   toggleSort: ({ colors }: PaperTheme) => ({
     height: 52,
@@ -212,6 +216,7 @@ const styles = StyleSheet.create<any>({
     borderRadius: 0
   },
   sortDesc: {
+    borderLeftWidth: 0,
     borderBottomRightRadius: 0
   },
   sectionTitle: {

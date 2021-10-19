@@ -1,6 +1,6 @@
 import React, { ComponentProps, FC } from 'react';
 import { GestureResponderEvent, Pressable, StyleSheet, View } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { ActivityIndicator, useTheme } from 'react-native-paper';
 import Animated from 'react-native-reanimated';
 
 import { shadowElevations } from 'config/core';
@@ -10,15 +10,16 @@ import { Icon, IconName } from './icon.component';
 
 type Props = ComponentProps<typeof Pressable> & {
   iconName: IconName | string;
+  loading?: boolean;
 }
 
-export const FabButton: FC<Props> = ({ style, iconName, disabled, onPress, ...moreProps }) => {
+export const FabButton: FC<Props> = ({ style, iconName, disabled, loading, onPress, ...moreProps }) => {
   const theme = useTheme();
   const { scaleAnimatedStyle, animateScale } = useAnimatedScale({ startScale: 0.85 });
 
   const handlePress = (event: GestureResponderEvent) => {
     animateScale();
-    onPress && onPress(event);
+    !loading && (onPress && onPress(event));
   };
 
   return (
@@ -30,7 +31,11 @@ export const FabButton: FC<Props> = ({ style, iconName, disabled, onPress, ...mo
     >
       <Animated.View style={[styles.wrapper, scaleAnimatedStyle]}>
         <View style={styles.backdrop(theme, disabled)} />
-        <Icon style={styles.icon} name={iconName} color='#fff' size={28} />
+        {
+          loading
+            ? <ActivityIndicator style={styles.elevation} color='#fff' />
+            : <Icon style={styles.elevation} name={iconName} color='#fff' size={28} />
+        }
       </Animated.View>
       <View style={styles.bandage(theme)} />
     </Pressable>
@@ -69,7 +74,7 @@ const styles = StyleSheet.create<any>({
     width: 41,
     backgroundColor: colors.background
   }),
-  icon: {
+  elevation: {
     elevation: 1
   }
 });

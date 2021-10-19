@@ -5,12 +5,25 @@ import { FilledTextField } from 'rn-material-ui-textfield';
 
 import { PaperTheme } from 'models';
 
-export const TextInput: FC<ComponentProps<typeof FilledTextField>> = ({ style, labelTextStyle, inputContainerStyle, ...moreProps }) => {
+type Props = ComponentProps<typeof FilledTextField> & {
+  errorColorOnly?: boolean;
+}
+
+export const TextInput: FC<Props> = ({
+  style,
+  containerStyle,
+  labelTextStyle,
+  inputContainerStyle,
+  errorColorOnly,
+  ...moreProps
+}) => {
+
   const theme = useTheme();
 
   return (
     <FilledTextField
       style={[styles.input(theme), style]}
+      containerStyle={[errorColorOnly && styles.errorTextHidden, containerStyle]}
       inputContainerStyle={[styles.inputContainer(theme), inputContainerStyle]}
       labelTextStyle={[styles.label, labelTextStyle]}
       tintColor={theme.colors.primary}
@@ -19,6 +32,7 @@ export const TextInput: FC<ComponentProps<typeof FilledTextField>> = ({ style, l
       {...moreProps}
     />
   );
+
 };
 
 const styles = StyleSheet.create<any>({
@@ -31,6 +45,11 @@ const styles = StyleSheet.create<any>({
     borderRightWidth: 1,
     borderColor: 'rgba(0,0,0,0.2)'
   }),
+  errorTextHidden: {
+    width: '100%',
+    height: 50,
+    overflow: 'hidden'
+  },
   input: ({ fonts, fontSizes }: PaperTheme) => ({
     fontFamily: fonts.regular.fontFamily,
     fontSize: fontSizes.text,

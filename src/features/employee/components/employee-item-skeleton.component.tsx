@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   media: {
-    width: 65,
+    width: 81,
     height: 65,
     borderRadius: 0
   },

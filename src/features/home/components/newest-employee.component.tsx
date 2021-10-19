@@ -45,13 +45,6 @@ export const NewestEmployee: FC<Props> = ({ employee, delay }) => {
           imageUrl={pictureFull}
           gender={gender}
         />
-
-        {/* <View style={styles.imageWrapper(theme)}>
-          <Image
-            style={styles.image}
-            source={{ uri: pictureFull as any }}
-          />
-        </View> */}
         <LottieView
           style={styles.sparkle}
           autoPlay={true}

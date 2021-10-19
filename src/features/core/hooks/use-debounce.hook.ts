@@ -9,12 +9,14 @@ export const useDebounce = (): {
 
   const [loading, setLoading] = useState(false);
 
-  const debounce = (callback: () => void, duration = DEBOUNCE_DURATION) => {
+  const debounce = (callback: () => void, duration?: number) => {
     if (loading) { return; }
 
     setLoading(true);
-    callback();
-    setTimeout(() => setLoading(false), duration);
+    setTimeout(() => {
+      callback();
+      setLoading(false);
+    }, duration || DEBOUNCE_DURATION);
   };
 
   return { debounce, loading };

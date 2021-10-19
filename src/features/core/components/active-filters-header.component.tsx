@@ -22,7 +22,7 @@ export const ActiveFiltersHeader: FC<Props> = ({
 }) => (
 
   <View style={[styles.activeFiltersWrapper, style]}>
-    {(keyword?.trim() !== '') && (
+    {(!!keyword?.trim()) && (
       <View style={styles.filterItem}>
         <Text style={[styles.filterText, styles.filterLabel]}>
           {filterByLabel || 'Filter by: '}

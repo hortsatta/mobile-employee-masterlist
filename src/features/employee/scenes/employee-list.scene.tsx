@@ -90,7 +90,7 @@ const EmployeeListSceneComponent: FC = () => {
   };
 
   const refreshData = useCallback(() => {
-    if (!filters.searchKeyword || filters.searchKeyword.trim() === '') {
+    if (!filters.searchKeyword.trim()) {
       fetchInitialPageEmployees();
     } else {
       fetchEmployeesByKeyword();
@@ -149,7 +149,7 @@ const EmployeeListSceneComponent: FC = () => {
       || employeeLoading
       || refreshing
       || isAllEmployeesLoaded
-      || (filters.searchKeyword && filters.searchKeyword.trim() !== '')
+      || (!!filters.searchKeyword.trim())
     ) { return; }
     fetchNextPageEmployees();
   };
@@ -206,7 +206,7 @@ const EmployeeListSceneComponent: FC = () => {
               <Fin
                 show={
                   (isAllEmployeesLoaded && !employeeLoading)
-                  || (filters.searchKeyword && filters.searchKeyword.trim() !== '' && !employeeLoading)
+                  || (!!filters.searchKeyword.trim() && !employeeLoading)
                 }
               />
             )

@@ -61,7 +61,7 @@ export const SignInForm: FC<Props> = ({ style, loading, onSubmit }) => {
         render={
           ({
             fieldState: { error },
-            field: { onChange, onBlur, value }
+            field: { value, onChange, onBlur }
           }) => (
             <FormTextInput
               containerStyle={styles.emailInputWrapper}
@@ -90,7 +90,7 @@ export const SignInForm: FC<Props> = ({ style, loading, onSubmit }) => {
         render={
           ({
             fieldState: { error },
-            field: { onChange, onBlur, value }
+            field: { value, onChange, onBlur }
           }) => (
             <FormTextInput
               placeholder='Password'
