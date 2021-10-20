@@ -3,6 +3,8 @@ import { JobTitle } from 'models';
 
 export type JobTitleState = EntityState<JobTitle> & {
   loading: boolean;
+  searchKeyword?: string;
+  filterDepartment?: string;
 };
 
 const jobTitleAdapter = createEntityAdapter<JobTitle>({
