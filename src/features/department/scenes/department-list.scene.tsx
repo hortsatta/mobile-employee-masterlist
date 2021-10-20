@@ -8,7 +8,7 @@ import {
   fetchAllDepartmentsStart,
   selectDepartmentSearchKeyword,
   selectDepartmentLoading,
-  setDepartmentSearchKeyword,
+  setDepartmentFilters,
   selectDepartmentsByKeyword
 } from 'store/department';
 import {
@@ -96,7 +96,7 @@ const DepartmentListSceneComponent: FC = () => {
   const handleFiltersSubmit = (formData: { searchKeyword?: string }) => {
     setShowFilters(false);
     debounce();
-    dispatch(setDepartmentSearchKeyword(formData.searchKeyword || ''));
+    dispatch(setDepartmentFilters(formData.searchKeyword || ''));
   };
 
   return (

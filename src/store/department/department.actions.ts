@@ -5,7 +5,7 @@ export enum DepartmentActionType {
   FETCH_ALL_DEPARTMENTS_START = '[Department] Fetch All Departments Start',
   FETCH_ALL_DEPARTMENTS_SUCCESS = '[Department] Fetch All Departments Success',
   FETCH_ALL_DEPARTMENTS_FAILURE = '[Department] Fetch All Departments Failure',
-  SET_SEARCH_KEYWORD = '[Department] Set Search Keyword',
+  SET_DEPARTMENT_FILTERS = '[Department] Set Department Filters',
 }
 
 const fetchAllDepartmentsStart = createAction(
@@ -22,14 +22,14 @@ const fetchAllDepartmentsFailure = createAction(
   DepartmentActionType.FETCH_ALL_DEPARTMENTS_FAILURE
 );
 
-const setDepartmentSearchKeyword = createAction(
-  DepartmentActionType.SET_SEARCH_KEYWORD,
-  (value: string) => ({ payload: value })
+const setDepartmentFilters = createAction(
+  DepartmentActionType.SET_DEPARTMENT_FILTERS,
+  (searchKeyword: string) => ({ payload: searchKeyword })
 );
 
 export {
   fetchAllDepartmentsStart,
   fetchAllDepartmentsSuccess,
   fetchAllDepartmentsFailure,
-  setDepartmentSearchKeyword
+  setDepartmentFilters
 };
