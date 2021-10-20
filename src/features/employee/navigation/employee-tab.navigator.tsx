@@ -1,10 +1,14 @@
 import React, { FC } from 'react';
-import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+  BottomTabNavigationOptions,
+  createBottomTabNavigator
+} from '@react-navigation/bottom-tabs';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { appRoutes, shadowElevations } from 'config/core';
 import { PaperTheme } from 'models';
+import { DepartmentNavigator } from 'features/department/navigation';
 import { SubHeader } from 'features/core/components';
 import { EmployeeListScene, UpsertEmployeeScene } from '../scenes';
 
@@ -24,7 +28,7 @@ const getSvg = (name: string) => {
   switch (name) {
     case appRoutes.employeeList.path:
       return EmployeesSvg;
-    case appRoutes.departmentList.path:
+    case appRoutes.department.path:
       return HierarchySvg;
     case appRoutes.jobTitleList.path:
       return KingSvg;
@@ -32,7 +36,7 @@ const getSvg = (name: string) => {
       return WandSvg;
     case `${appRoutes.employeeList.path}_grayscale`:
       return EmployeesGrayscaleSvg;
-    case `${appRoutes.departmentList.path}_grayscale`:
+    case `${appRoutes.department.path}_grayscale`:
       return HierarchyGrayscaleSvg;
     case `${appRoutes.jobTitleList.path}_grayscale`:
       return KingGrayscaleSvg;
@@ -88,9 +92,9 @@ export const EmployeeTabNavigator: FC = () => {
         }}
       />
       <Tab.Screen
-        name={appRoutes.departmentList.path}
-        component={DepartmentList}
-        options={{ title: appRoutes.departmentList.name }}
+        name={appRoutes.department.path}
+        component={DepartmentNavigator}
+        options={{ headerShown: false }}
       />
       <Tab.Screen
         name={appRoutes.jobTitleList.path}
@@ -130,5 +134,4 @@ const styles = StyleSheet.create<any>({
 });
 
 // TEMPO
-const DepartmentList: FC = () => null;
 const JobTitleList: FC = () => null;

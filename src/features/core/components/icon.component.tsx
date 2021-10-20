@@ -19,6 +19,7 @@ import MagnifyingGlassSvg from 'assets/svgs/magnifying-glass.svg';
 import MaleSvg from 'assets/svgs/mars.svg';
 import PenSwirlSvg from 'assets/svgs/pen-swirl.svg';
 import PlusSvg from 'assets/svgs/plus.svg';
+import ScreenUsersSvg from 'assets/svgs/screen-users.svg';
 import SquareCheckSvg from 'assets/svgs/square-check.svg';
 import SquarePlusSvg from 'assets/svgs/square-plus.svg';
 import UserTieSvg from 'assets/svgs/user-tie.svg';
@@ -44,6 +45,7 @@ export enum IconName {
   MALE = 'male',
   PEN_SWIRL = 'pen_swirl',
   PLUS = 'plus',
+  SCREEN_USERS = 'screen_users',
   SQUARE_CHECK = 'square_check',
   SQUARE_PLUS = 'square_plus',
   USER_TIE = 'user_tie',
@@ -88,6 +90,8 @@ const getSvg = (name: IconName | string) => {
       return PenSwirlSvg;
     case IconName.PLUS:
       return PlusSvg;
+    case IconName.SCREEN_USERS:
+      return ScreenUsersSvg;
     case IconName.SQUARE_CHECK:
       return SquareCheckSvg;
     case IconName.SQUARE_PLUS:

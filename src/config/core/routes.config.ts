@@ -20,7 +20,7 @@ export const appRoutes: any = {
     name: 'Sign In',
     path: 'sign_in'
   },
-  // Employees
+  // Employee
   employee: {
     name: 'Employees',
     path: 'employee'
@@ -41,9 +41,18 @@ export const appRoutes: any = {
     name: 'New Employee',
     path: 'upsert_employee'
   },
+  // Department
+  department: {
+    name: 'Departments',
+    path: 'department'
+  },
   departmentList: {
     name: 'Departments',
     path: 'department_list'
+  },
+  upsertDepartment: {
+    name: 'New Department',
+    path: 'upsert_department'
   },
   jobTitleList: {
     name: 'Job Title List',

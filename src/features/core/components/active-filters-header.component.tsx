@@ -9,7 +9,7 @@ type Props ={
   sortBy?: string;
   orderBy?: string;
   filterByLabel?: string;
-  sortLabel?: string;
+  sortByLabel?: string;
 }
 
 export const ActiveFiltersHeader: FC<Props> = ({
@@ -18,7 +18,7 @@ export const ActiveFiltersHeader: FC<Props> = ({
   sortBy,
   orderBy,
   filterByLabel,
-  sortLabel
+  sortByLabel
 }) => (
 
   <View style={[styles.activeFiltersWrapper, style]}>
@@ -30,15 +30,15 @@ export const ActiveFiltersHeader: FC<Props> = ({
         <Text style={styles.filterText}>{keyword}</Text>
       </View>
     )}
-    <View style={styles.filterItem}>
+    {(sortBy && orderBy) && <View style={styles.filterItem}>
       <Text style={[styles.filterText, styles.filterLabel]}>
-        {sortLabel || 'Sorted by: '}
+        {sortByLabel || 'Sorted by: '}
       </Text>
       <Text style={styles.filterText}>{`${sortBy}, `}</Text>
       <Text style={[styles.filterText, styles.filterOrderText]}>
         {orderBy}
       </Text>
-    </View>
+    </View>}
   </View>
 
 );
