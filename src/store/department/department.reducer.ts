@@ -3,7 +3,8 @@ import { createReducer } from '@reduxjs/toolkit';
 import {
   fetchAllDepartmentsFailure,
   fetchAllDepartmentsStart,
-  fetchAllDepartmentsSuccess
+  fetchAllDepartmentsSuccess,
+  setDepartmentSearchKeyword
 } from './department.actions';
 import { departmentAdapter, initialState } from './department.state';
 
@@ -18,6 +19,9 @@ export const departmentReducer = createReducer(initialState, builder => (
     })
     .addCase(fetchAllDepartmentsFailure, state => {
       state.loading = false;
+    })
+    .addCase(setDepartmentSearchKeyword, (state, action) => {
+      state.searchKeyword = action.payload;
     })
     .addDefaultCase(state => state)
 ));

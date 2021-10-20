@@ -3,6 +3,7 @@ import { Department } from 'models';
 
 export type DepartmentState = EntityState<Department> & {
   loading: boolean;
+  searchKeyword?: string;
 };
 
 const departmentAdapter = createEntityAdapter<Department>({

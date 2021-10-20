@@ -1,7 +1,9 @@
 import firebase from 'firebase';
 import { Theme } from 'react-native-paper/lib/typescript/types';
 
-export interface AuditTrail {
+export enum GridMode { SINGLE, BATCH }
+
+type AuditTrail = {
   createdAt?: firebase.firestore.Timestamp | string;
   updatedAt?: firebase.firestore.Timestamp | string;
   createdByUserId?: string;
@@ -37,4 +39,4 @@ type PaperTheme = Omit<Theme, 'colors'> & {
   };
 };
 
-export type { NotificationMessage, PaperTheme };
+export type { AuditTrail, NotificationMessage, PaperTheme };
