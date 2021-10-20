@@ -95,7 +95,7 @@ const styles = StyleSheet.create<any>({
   index: {
     position: 'absolute',
     right: -23,
-    top: 38,
+    top: 21,
     width: 64,
     fontSize: 10,
     textAlign: 'center',

@@ -2,9 +2,8 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/core';
 import { StyleSheet, View } from 'react-native';
-import { Divider, Modal, Portal } from 'react-native-paper';
 
-import { Employee, EmployeePageKey, SortBy } from 'models';
+import { Employee, EmployeePageKey, GridMode, SortBy } from 'models';
 import { appRoutes } from 'config/core';
 import {
   fetchEmployeesByKeywordStart,
@@ -19,15 +18,17 @@ import {
 } from 'store/employee';
 import {
   ActiveFiltersHeader,
+  BottomSheetScrollView,
   FabButton,
+  Fin,
+  GridItemSeparator,
+  GridListItem,
   IconName,
   RefreshControl,
   StageFlatList,
-  Text,
   withHeaderResetter
 } from 'features/core/components';
 import {
-  EmployeeListItem,
   EmployeeItem,
   EmployeeItemSkeleton,
   EmployeeListHeaderRight,
@@ -36,22 +37,14 @@ import {
   pageKeySelectItems
 } from '../components';
 
-enum GridMode { SINGLE, BATCH }
-
 const placeholderData = [{ id: '1' }, { id: '2' }];
-
-const ItemSeparator: FC = () => <Divider style={styles.divider}  />;
 
 const Placeholder: FC = () => (
   <View>
     <EmployeeItemSkeleton />
-    <ItemSeparator />
+    <GridItemSeparator />
     <EmployeeItemSkeleton />
   </View>
-);
-
-const Fin: FC<{ show: boolean }> = ({ show }) => (
-  show ? <Text style={styles.finText}>fin.</Text> : null
 );
 
 const EmployeeListSceneComponent: FC = () => {
@@ -65,12 +58,44 @@ const EmployeeListSceneComponent: FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [gridMode, setGridMode] = useState(GridMode.SINGLE);
   const [selectedEmployeeIds, setSelectedEmployeeIds] = useState<string []>([]);
-  const [showModalFilters, setShowModalFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<any>({
     pageKey: EmployeePageKey.FULL_NAME,
     sortBy: SortBy.ASC,
     searchKeyword: ''
   });
+
+  const refreshData = useCallback(() => {
+    if (!filters.searchKeyword.trim()) {
+      fetchInitialPageEmployees();
+    } else {
+      fetchEmployeesByKeyword();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters]);
+
+  useEffect(() => refreshData(), [refreshData]);
+
+  useEffect(() => {
+    setOptions({
+      headerRight: () => (
+        <EmployeeListHeaderRight
+          employeeIdCount={selectedEmployeeIds.length}
+          isBatchMode={gridMode === GridMode.BATCH}
+          onCancelBatchPress={handleCancelBatchPress}
+          onBatchPress={() => setGridMode(GridMode.BATCH)}
+          onFilterPress={() => setShowFilters(true)}
+        />
+      )
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedEmployeeIds, gridMode]);
+
+  useEffect(() => {
+    // Return if current page in undefined, else hide refreshing indicator
+    if (currentPage == null) { return; }
+    setRefreshing(false);
+  }, [currentPage]);
 
   const fetchEmployeesByKeyword = useCallback(() => {
     dispatch(fetchEmployeesByKeywordStart(
@@ -89,45 +114,6 @@ const EmployeeListSceneComponent: FC = () => {
     dispatch(fetchNextPageEmployeesStart(filters.pageKey, filters.sortBy, true));
   };
 
-  const refreshData = useCallback(() => {
-    if (!filters.searchKeyword.trim()) {
-      fetchInitialPageEmployees();
-    } else {
-      fetchEmployeesByKeyword();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters]);
-
-  useEffect(() => {
-    refreshData();
-  }, [refreshData]);
-
-  const handleCancelBatchPress = () => {
-    setGridMode(GridMode.SINGLE);
-    setSelectedEmployeeIds([]);
-  };
-
-  useEffect(() => {
-    setOptions({
-      headerRight: () => (
-        <EmployeeListHeaderRight
-          employeeIdCount={selectedEmployeeIds.length}
-          isBatchMode={gridMode === GridMode.BATCH}
-          onCancelBatchPress={handleCancelBatchPress}
-          onBatchPress={() => setGridMode(GridMode.BATCH)}
-          onFilterPress={() => setShowModalFilters(true)}
-        />
-      )
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedEmployeeIds, gridMode]);
-
-  useEffect(() => {
-    // Return if current page in undefined, else hide refreshing indicator
-    if (currentPage == null) { return; }
-    setRefreshing(false);
-  }, [currentPage]);
-
   const navigateEmployeeDetail = (employee: Employee) => {
     // const { navigate } = getParent() as any;
     // Set selected employee id, and push to employee detail route
@@ -137,6 +123,11 @@ const EmployeeListSceneComponent: FC = () => {
       params: { id: employee.id }
     });
   };
+
+  const handleCancelBatchPress = useCallback(() => {
+    setGridMode(GridMode.SINGLE);
+    setSelectedEmployeeIds([]);
+  }, []);
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -167,7 +158,7 @@ const EmployeeListSceneComponent: FC = () => {
   };
 
   const handleFiltersSubmit = (formData: EmployeeFiltersFormData) => {
-    setShowModalFilters(false);
+    setShowFilters(false);
     setFilters(formData);
   };
 
@@ -180,16 +171,16 @@ const EmployeeListSceneComponent: FC = () => {
           (employeeLoading || refreshing)
             ? <Placeholder />
             : (
-              <EmployeeListItem
+              <GridListItem
                 isBatchMode={gridMode === GridMode.BATCH}
                 onPress={() => navigateEmployeeDetail(item)}
                 onLongPress={(append: boolean) => handleEmployeeItemLongPress(append, item)}
               >
                 <EmployeeItem index={index} item={item} />
-              </EmployeeListItem>
+              </GridListItem>
             )
         )}
-        ItemSeparatorComponent={ItemSeparator}
+        ItemSeparatorComponent={GridItemSeparator}
         ListHeaderComponentStyle={styles.header}
         ListHeaderComponent={
           <ActiveFiltersHeader
@@ -230,19 +221,17 @@ const EmployeeListSceneComponent: FC = () => {
         showsVerticalScrollIndicator={false}
         withSubHeader
       />
-      <Portal>
-        <Modal
-          contentContainerStyle={styles.modalFilters}
-          visible={showModalFilters}
-          onDismiss={() => setShowModalFilters(false)}
-        >
-          <EmployeeListFilterOptions
-            filters={filters}
-            style={styles.filterOptions}
-            onSubmit={handleFiltersSubmit}
-          />
-        </Modal>
-      </Portal>
+      <BottomSheetScrollView
+        show={showFilters}
+        snapPoints={['55%']}
+        onClose={() => setShowFilters(false)}
+      >
+        <EmployeeListFilterOptions
+          style={styles.filterOptions}
+          filters={filters}
+          onSubmit={handleFiltersSubmit}
+        />
+      </BottomSheetScrollView>
     </>
   );
 };
@@ -253,28 +242,12 @@ const styles = StyleSheet.create({
   wrapper: {
     paddingHorizontal: 0
   },
-  divider: {
-    height: 5,
-    backgroundColor: 'transparent'
-  },
   header: {
     paddingTop: 8,
     paddingBottom: 24
   },
   footer: {
     paddingTop: 5
-  },
-  finText: {
-    marginTop: 4,
-    marginRight: 16,
-    textAlign: 'right',
-    fontStyle: 'italic',
-    opacity: 0.4
-  },
-  modalFilters: {
-    marginHorizontal: 16,
-    borderRadius: 12,
-    overflow: 'hidden'
   },
   filterOptions: {
     paddingHorizontal: 24

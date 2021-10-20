@@ -30,7 +30,7 @@ type Props = {
 const schema = z.object({
   pageKey: z.string(),
   sortBy: z.string(),
-  searchKeyword: z.string()
+  searchKeyword: z.string().optional()
 });
 
 // Select  picker pagekey items
@@ -61,9 +61,8 @@ const EmployeeListFilterOptions: FC<Props> = ({ style, filters, onSubmit }) => {
 
   return (
     <View style={[styles.wrapper(theme), style]}>
-      <View style={[styles.section, styles.sectionFirst]}>
-        <Text style={styles.sectionTitle}>Filter</Text>
-        <Divider />
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Filter & Sort By</Text>
       </View>
       <Controller
         name='searchKeyword'
@@ -101,10 +100,6 @@ const EmployeeListFilterOptions: FC<Props> = ({ style, filters, onSubmit }) => {
           )
         }
       />
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Sort By</Text>
-        <Divider />
-      </View>
       <View style={styles.sort}>
         <Controller
           name='pageKey'
@@ -165,7 +160,7 @@ const EmployeeListFilterOptions: FC<Props> = ({ style, filters, onSubmit }) => {
 
 const styles = StyleSheet.create<any>({
   wrapper: ({ colors }: PaperTheme) => ({
-    paddingTop: 30,
+    paddingTop: 18,
     paddingBottom: 8,
     paddingHorizontal: 16,
     backgroundColor: colors.background
@@ -174,11 +169,17 @@ const styles = StyleSheet.create<any>({
     marginTop: 36,
     marginBottom: 8
   },
-  sectionFirst: {
-    marginTop: 0
-  },
   section: {
-    marginVertical: 20
+    marginTop: 0,
+    marginBottom: 20
+  },
+  sectionTitle: {
+    textTransform: 'uppercase',
+    letterSpacing: -0.5,
+    opacity: 0.5
+  },
+  search: {
+    marginBottom: 8
   },
   searchIcon: {
     justifyContent: 'center',
@@ -218,11 +219,6 @@ const styles = StyleSheet.create<any>({
   sortDesc: {
     borderLeftWidth: 0,
     borderBottomRightRadius: 0
-  },
-  sectionTitle: {
-    textTransform: 'uppercase',
-    letterSpacing: -0.5,
-    opacity: 0.5
   },
   submitButton: {
     alignSelf: 'center',

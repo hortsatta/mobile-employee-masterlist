@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/core';
 import { Badge, IconButton, useTheme } from 'react-native-paper';
 
 import { PaperTheme } from 'models';
-import { appRoutes, lightColors } from 'config/core';
+import { appRoutes } from 'config/core';
 import {
   Button,
   ContextMenu,
@@ -58,14 +58,16 @@ export const EmployeeListHeaderRight: FC<Props> = ({
                 style={styles.cancelButton}
                 contentStyle={styles.cancelButtonWrapper}
                 mode='text'
-                color={lightColors.primary}
+                color={theme.colors.primary}
                 onPress={onCancelBatchPress}
               >
                 <Text style={styles.cancelText(theme)}>Cancel</Text>
               </Button>
               <View>
                 <Icon name={IconName.USER_TIE} size={ICON_SIZE} />
-                <Badge style={styles.employeeCountBadge} size={18}>{employeeIdCount}</Badge>
+                <Badge style={styles.employeeCountBadge(theme)} size={18}>
+                  {employeeIdCount}
+                </Badge>
               </View>
             </>
           )
@@ -109,18 +111,15 @@ const styles = StyleSheet.create<any>({
     paddingTop: 2,
     height: 30
   },
-  cancelButtonLabel: {
-    marginHorizontal: 8
-  },
-  cancelText: ({ fonts }: PaperTheme) => ({
-    color: lightColors.primary,
+  cancelText: ({ colors, fonts }: PaperTheme) => ({
+    color: colors.primary,
     fontFamily: fonts.medium.fontFamily
   }),
-  employeeCountBadge: {
+  employeeCountBadge: ({ colors }: PaperTheme) => ({
     position: 'absolute',
     left: -8,
-    backgroundColor: lightColors.accent
-  },
+    backgroundColor: colors.accent
+  }),
   menuItem: {
     marginLeft: 0
   },
