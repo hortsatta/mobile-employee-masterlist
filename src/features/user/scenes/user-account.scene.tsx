@@ -32,7 +32,9 @@ export const UserAccountSceneComponent: FC = () => {
 
   const titleText = useMemo(() => {
     const isAdmin = currentUserRole?.value === adminUserRole?.value;
-    const isFemale = currentEmployee?.personalInfo.gender === Gender.FEMALE;
+    const isFemale = currentEmployee?.personalInfo
+      .gender.toLowerCase() === Gender.FEMALE;
+
     const title = isAdmin
       ? (isFemale ? 'Milady' : 'Milord')
       : (isFemale ? 'Plain Jane' : 'Average Joe');
