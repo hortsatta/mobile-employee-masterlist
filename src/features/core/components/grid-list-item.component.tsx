@@ -49,8 +49,9 @@ export const GridListItem: FC<Props> = ({ isBatchMode, onPress, onLongPress, chi
   };
 
   const handleLongPress = () => {
+    if (!onLongPress) { return; }
     setIsSelected(!isSelected);
-    onLongPress && onLongPress(!isSelected);
+    onLongPress(!isSelected);
   };
 
   return (
