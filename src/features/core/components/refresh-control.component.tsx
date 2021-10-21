@@ -9,15 +9,7 @@ type Props = ComponentProps<typeof RNRefreshControl> & {
   withSubHeader?: boolean;
 }
 
-export const RefreshControl: FC<Props> = ({
-  isStage,
-  withSubHeader,
-  progressViewOffset,
-  colors,
-  tintColor,
-  ...moreProps
-}) => {
-
+export const RefreshControl: FC<Props> = ({ isStage, withSubHeader, ...moreProps }) => {
   const theme = useTheme();
 
   const topOffset = useMemo(
@@ -27,11 +19,11 @@ export const RefreshControl: FC<Props> = ({
 
   return (
     <RNRefreshControl
-      progressViewOffset={progressViewOffset || (isStage ? topOffset : 0)}
-      colors={colors || [theme.colors.primary]}
-      tintColor={tintColor || theme.colors.primary}
+      progressViewOffset={isStage ? topOffset : 0}
+      progressBackgroundColor={theme.colors.surface}
+      colors={[theme.colors.primary]}
+      tintColor={theme.colors.primary}
       {...moreProps}
     />
   );
-
 };

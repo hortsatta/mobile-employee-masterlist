@@ -1,4 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
+import { useSelector } from 'react-redux';
 import React, { FC, useMemo, ComponentProps, useRef, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { Portal, useTheme } from 'react-native-paper';
@@ -9,8 +10,8 @@ import BottomSheet, {
   BottomSheetScrollView as BSScrollView
 } from '@gorhom/bottom-sheet';
 
+import { darkColors } from 'config/core';
 import { PaperTheme } from 'models';
-import { useSelector } from 'react-redux';
 import { selectDarkMode } from 'store/core';
 
 type Props = Omit<BottomSheetProps, 'snapPoints'> & {
@@ -43,6 +44,7 @@ export const BottomSheetScrollView: FC<Props> = ({
       <Portal>
         <BottomSheet
           ref={ref}
+          handleIndicatorStyle={darkMode && styles.handleIndicator}
           handleStyle={styles.handle(theme)}
           backgroundStyle={styles.background(theme)}
           snapPoints={snapPoints || defaultSnapPoints}
@@ -51,7 +53,7 @@ export const BottomSheetScrollView: FC<Props> = ({
           enableOverDrag
           backdropComponent={props => (
             <BottomSheetBackdrop
-              opacity={0.3}
+              opacity={darkMode ? 0.6 : 0.3}
               appearsOnIndex={0}
               disappearsOnIndex={-1}
               {...props}
@@ -79,6 +81,9 @@ const styles = StyleSheet.create<any>({
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16
   }),
+  handleIndicator: {
+    backgroundColor: darkColors.surface
+  },
   background: ({ colors }: PaperTheme) => ({
     backgroundColor: colors.background
   })

@@ -1,4 +1,5 @@
 import React, { FC, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -7,6 +8,7 @@ import Animated, {
   withSpring
 } from 'react-native-reanimated';
 
+import { selectDarkMode } from 'store/core';
 import { Icon, IconName } from 'features/core/components';
 
 type Props = {
@@ -14,6 +16,7 @@ type Props = {
 }
 
 export const Xmark: FC<Props> = ({ delay }) => {
+  const darkMode = useSelector(selectDarkMode);
   const scale = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -27,7 +30,7 @@ export const Xmark: FC<Props> = ({ delay }) => {
 
   return (
     <Animated.View style={[styles.wrapper, animatedStyle]}>
-      <Icon name={IconName.XMARK} size={50} color='rgba(0,0,0,0.15)' />
+      <Icon name={IconName.XMARK} size={50} color={darkMode ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)'} />
     </Animated.View>
   );
 };

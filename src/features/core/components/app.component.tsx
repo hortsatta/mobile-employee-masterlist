@@ -29,7 +29,7 @@ export const App: FC = () => {
   const darkMode = useSelector(selectDarkMode);
   // Define final color mode for the app's theme;
   // Apply result to react-native-paper and react-navigation theme.
-  const isDark = darkMode == null ? colorScheme === 'dark' : darkMode;
+  const isDark = (darkMode == null) ? colorScheme === 'dark' : darkMode;
   const paperTheme = getPaperTheme(isDark);
   const navTheme = getNavTheme(isDark);
   const notificationMessages = useSelector(selectNotificationMessages);

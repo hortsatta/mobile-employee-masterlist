@@ -40,7 +40,7 @@ export const EmployeeItem: FC<Props> = ({ style, item, index, loading }) => {
           <ActivityIndicator />
         </View>
       )}
-      <View style={styles.indexWrapper}>
+      <View style={styles.indexWrapper(theme)}>
         <Text style={styles.index}>{formattedIndex}</Text>
       </View>
       <EmployeeImage
@@ -64,7 +64,7 @@ const styles = StyleSheet.create<any>({
     justifyContent: 'space-between',
     width: '100%',
     backgroundColor: colors.surface,
-    borderColor: '#e5e5e5',
+    borderColor: colors.border,
     borderTopWidth: 1,
     borderBottomWidth: 1,
     overflow: 'hidden'
@@ -87,11 +87,11 @@ const styles = StyleSheet.create<any>({
     opacity: 0.5,
     lineHeight: 16
   },
-  indexWrapper: {
+  indexWrapper: ({ colors }: PaperTheme) => ({
     width: 16,
     height: '100%',
-    backgroundColor: '#dddddd'
-  },
+    backgroundColor: colors.index
+  }),
   index: {
     position: 'absolute',
     right: -23,

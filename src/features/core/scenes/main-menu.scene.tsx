@@ -1,12 +1,12 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StackActions, useNavigation } from '@react-navigation/core';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StyleSheet, View } from 'react-native';
 
 import { appRoutes, darkColors } from 'config/core';
 import { Gender } from 'models';
-import { selectDarkMode } from 'store/core';
+import { selectDarkMode, toggleDarkMode } from 'store/core';
 import { selectCurrentEmployee } from 'store/auth';
 import { GithubButton } from 'features/home/components';
 import { MenuButton, StageView } from '../components';
@@ -20,7 +20,8 @@ import GhostSvg from 'assets/svgs/ghost.svg';
 const ICON_SIZE = 70;
 
 export const MainMenuScene: FC<StackScreenProps<any>> = () => {
-  const { dispatch, navigate, getParent } = useNavigation();
+  const { dispatch: navigationDispatch, navigate, getParent } = useNavigation();
+  const dispatch = useDispatch();
   const darkMode = useSelector(selectDarkMode);
   const currentEmployee = useSelector(selectCurrentEmployee);
 
@@ -35,7 +36,7 @@ export const MainMenuScene: FC<StackScreenProps<any>> = () => {
     if (prevRoute && (routeName === prevRoute.name)) {
       navigate(routeName as any);
     } else {
-      dispatch(StackActions.replace(routeName));
+      navigationDispatch(StackActions.replace(routeName));
     }
   //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -86,6 +87,7 @@ export const MainMenuScene: FC<StackScreenProps<any>> = () => {
                 <GhostSvg width={ICON_SIZE} height={ICON_SIZE} />
               </View>
             )}
+            onPress={() => dispatch(toggleDarkMode())}
           />
         </View>
         <GithubButton style={styles.github} />

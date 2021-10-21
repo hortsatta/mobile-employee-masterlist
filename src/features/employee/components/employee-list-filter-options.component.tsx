@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useSelector } from 'react-redux';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { Divider, IconButton, ToggleButton, useTheme } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';
@@ -6,6 +7,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { EmployeePageKey, PaperTheme, SortBy } from 'models';
+import { selectDarkMode } from 'store/core';
 import {
   Button,
   Icon,
@@ -41,6 +43,7 @@ const pageKeySelectItems = [
 
 const EmployeeListFilterOptions: FC<Props> = ({ style, filters, onSubmit }) => {
   const theme = useTheme();
+  const darkMode = useSelector(selectDarkMode);
   const { control, handleSubmit } = useForm<EmployeeFiltersFormData>({
     defaultValues: filters,
     resolver: zodResolver(schema)
@@ -128,9 +131,9 @@ const EmployeeListFilterOptions: FC<Props> = ({ style, filters, onSubmit }) => {
               >
                 <ToggleButton
                   style={[
-                    styles.toggleSort(theme),
+                    styles.toggleSort(darkMode, theme),
                     styles.sortAsc,
-                    isAsc(value) && styles.activeSort(theme)
+                    isAsc(value) && styles.activeSort(darkMode, theme)
                   ]}
                   icon={IconName.ARROW_LIST_ASCENDING}
                   value={SortBy.ASC}
@@ -138,9 +141,9 @@ const EmployeeListFilterOptions: FC<Props> = ({ style, filters, onSubmit }) => {
                 />
                 <ToggleButton
                   style={[
-                    styles.toggleSort(theme),
+                    styles.toggleSort(darkMode, theme),
                     styles.sortDesc,
-                    !isAsc(value) && styles.activeSort(theme)
+                    !isAsc(value) && styles.activeSort(darkMode, theme)
                   ]}
                   icon={IconName.ARROW_LIST_DESCENDING}
                   value={SortBy.DESC}
@@ -204,14 +207,17 @@ const styles = StyleSheet.create<any>({
     alignItems: 'center',
     justifyContent: 'space-between'
   },
-  activeSort: ({ colors }: PaperTheme) => ({
+  activeSort: (isDark: boolean, { colors }: PaperTheme) => ({
     backgroundColor: colors.primary,
-    borderWidth: 0
+    ...isDark
+      ? { borderLeftWidth: 0 }
+      : { borderWidth: 0 }
   }),
-  toggleSort: ({ colors }: PaperTheme) => ({
+  toggleSort: (isDark: boolean, { colors }: PaperTheme) => ({
     height: 52,
     backgroundColor: colors.surface,
-    borderWidth: 1
+    borderWidth: 1,
+    ...isDark && { borderColor: 'rgba(255,255,255,0.33)' }
   }),
   sortAsc: {
     borderRightWidth: 0,

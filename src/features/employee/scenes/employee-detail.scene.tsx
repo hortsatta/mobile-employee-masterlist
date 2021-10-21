@@ -39,7 +39,11 @@ const HeaderLeft: FC<HeaderProps> = ({ isDark, onPress }) => (
   <TouchableOpacity onPress={onPress}>
     <View style={styles.headerWrapper}>
       <Surface style={styles.header(isDark)}>
-        <Icon name={IconName.LEFT} size={22} />
+        <Icon
+          name={IconName.LEFT}
+          size={22}
+          { ...isDark && { color: darkColors.text } }
+        />
       </Surface>
     </View>
   </TouchableOpacity>
@@ -49,7 +53,11 @@ const HeaderRight: FC<HeaderProps> = ({ isDark, onPress }) => (
   <TouchableOpacity onPress={onPress}>
     <View style={styles.headerWrapper}>
       <Surface style={styles.header(isDark)}>
-        <Icon name={IconName.PEN_SWIRL} size={22} />
+        <Icon
+          name={IconName.PEN_SWIRL}
+          size={22}
+          { ...isDark && { color: darkColors.text } }
+        />
       </Surface>
     </View>
   </TouchableOpacity>
@@ -59,7 +67,7 @@ export const EmployeeDetailScene: FC<Props> = ({ route }) => {
   const { id } = route.params as any;
   const { navigate, setOptions } = useNavigation<any>();
   const { canActivate } = useGuard();
-  const isDark = useSelector(selectDarkMode);
+  const darkMode = useSelector(selectDarkMode);
   const selectedEmployee = useSelector(selectSelectedEmployee);
   const loading = useSelector(selectEmployeeLoading);
   const dispatch = useDispatch();
@@ -71,10 +79,8 @@ export const EmployeeDetailScene: FC<Props> = ({ route }) => {
       headerLeft: (props: any) => (
         <HeaderLeft
           {...props}
-          isDark={isDark}
-          onPress={() => {
-            props.onPress();
-          }}
+          isDark={darkMode}
+          onPress={() => props.onPress()}
         />
       )
     });
@@ -95,7 +101,7 @@ export const EmployeeDetailScene: FC<Props> = ({ route }) => {
         headerRight: (props: any) => (
           <HeaderRight
             {...props}
-            isDark={isDark}
+            isDark={darkMode}
             onPress={() => navigate(appRoutes.upsertEmployee.path)}
           />
         )
@@ -104,7 +110,7 @@ export const EmployeeDetailScene: FC<Props> = ({ route }) => {
   }, [selectedEmployee]);
 
   useEffect(() => {
-    if (selectedEmployee) { return; }
+    if (!selectedEmployee) { return; }
     dispatch(refreshEmployeeStart(id));
   }, [dispatch, id, selectedEmployee]);
 
@@ -175,7 +181,7 @@ const styles = StyleSheet.create<any>({
   header: (isDark: boolean) => ({
     padding: 4,
     borderWidth: 1,
-    borderColor: isDark ? '#fff' : '#000',
+    borderColor: isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.7)',
     borderRadius: 99,
     overflow: 'hidden'
   }),

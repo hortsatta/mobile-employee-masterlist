@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useSelector } from 'react-redux';
 import {
   BottomTabNavigationOptions,
   createBottomTabNavigator
@@ -8,6 +9,7 @@ import { useTheme } from 'react-native-paper';
 
 import { appRoutes, shadowElevations } from 'config/core';
 import { PaperTheme } from 'models';
+import { selectDarkMode } from 'store/core';
 import { useGuard } from 'features/core/hooks';
 import { SubHeader } from 'features/core/components';
 import { DepartmentNavigator } from 'features/department/navigation';
@@ -24,6 +26,7 @@ import TabVSvg from 'assets/svgs/tab-v.svg';
 import WandSvg from 'assets/svgs/wand.svg';
 import WandGrayscaleSvg from 'assets/svgs/wand-grayscale.svg';
 import { EmployeeRbacType } from 'config/rbac';
+
 
 const TAB_BAR_ICON_SIZE = 30;
 
@@ -57,8 +60,9 @@ const DisabledTabBarButton: FC = (props: any) => (
 );
 
 export const EmployeeTabNavigator: FC = () => {
-  const theme = useTheme();
+  const theme: any = useTheme();
   const { canActivate } = useGuard();
+  const darkMode = useSelector(selectDarkMode);
 
   return (
     <Tab.Navigator
@@ -79,9 +83,13 @@ export const EmployeeTabNavigator: FC = () => {
         },
         tabBarBackground: () => (
           <View style={styles.tabBarBackground}>
-            <View style={styles.wall(theme)} />
-            <TabVSvg width={41} height={57} fill={theme.colors.background} />
-            <View style={styles.wall(theme)} />
+            <View style={styles.wall(darkMode, theme)} />
+            <TabVSvg
+              width={41}
+              height={57}
+              fill={darkMode ? theme.colors.secondaryBackground : theme.colors.background}
+            />
+            <View style={styles.wall(darkMode, theme)} />
           </View>
         )
       })}
@@ -134,10 +142,10 @@ const styles = StyleSheet.create<any>({
     backgroundColor: 'transparent',
     ...shadowElevations[0]
   },
-  wall: ({ colors }: PaperTheme) => ({
+  wall: (isDark: boolean, { colors }: PaperTheme) => ({
     width: '100%',
     height: 56,
-    backgroundColor: colors.background,
+    backgroundColor: isDark ? colors.secondaryBackground : colors.background,
     borderTopWidth: 1,
     borderTopColor: 'rgba(0,0,0,0.05)'
   }),

@@ -1,12 +1,13 @@
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import React, { FC, useCallback, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { Surface } from 'react-native-paper';
+import { Surface, useTheme } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { Extrapolate, interpolate, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 import { fontSizes } from 'config/core';
-import { Employee } from 'models';
+import { Employee, PaperTheme } from 'models';
+import { selectDarkMode } from 'store/core';
 import { selectAllJobTitleEntities } from 'store/job-title';
 import { Text, TextField } from 'features/core/components';
 import { EmployeeImage } from './employee-image.component';
@@ -21,6 +22,8 @@ const AnimtedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
 export const EmployeeDetail: FC<Props> = ({ employee, scrollY, isScrolling }) => {
   const window = useWindowDimensions();
+  const theme = useTheme();
+  const darkMode = useSelector(selectDarkMode);
   const jobTitles = useSelector(selectAllJobTitleEntities);
   const zoom = useSharedValue(0);
   const { hireDate, salary, jobTitle, personalInfo } = employee;
@@ -140,7 +143,7 @@ export const EmployeeDetail: FC<Props> = ({ employee, scrollY, isScrolling }) =>
     <View>
       <Animated.View style={employeeImageAnimatedStyle}>
         <EmployeeImage
-          wrapperStyle={styles.employeeImgWrapper}
+          wrapperStyle={styles.employeeImgWrapper(darkMode, theme)}
           imageUrl={pictureFull || pictureThumb}
           gender={gender}
           placeholderWidth={80}
@@ -148,13 +151,13 @@ export const EmployeeDetail: FC<Props> = ({ employee, scrollY, isScrolling }) =>
           onPress={handleZoomEmployeeImage}
         />
       </Animated.View>
-      <View style={styles.header}>
+      <View style={styles.header(darkMode, theme)}>
         <AnimtedLinearGradient
           style={[styles.gradient, gradientAnimatedStyle]}
           colors={['transparent', 'rgba(0,0,0,0.5)']}
         />
       </View>
-      <Surface style={styles.content}>
+      <Surface style={styles.content(darkMode, theme)}>
         <View style={styles.titleWrapper}>
           <Text style={styles.fullName}>{fullName}</Text>
           <Text style={styles.jobTitle}>{currentJobTitle?.name}</Text>
@@ -202,34 +205,35 @@ export const EmployeeDetail: FC<Props> = ({ employee, scrollY, isScrolling }) =>
   );
 };
 
-const styles = StyleSheet.create({
-  header: {
+const styles = StyleSheet.create<any>({
+  header: (isDark: boolean, { colors }: PaperTheme) => ({
     height: 180,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'flex-end',
     borderBottomWidth: 2.5,
-    borderColor: '#383838'
-  },
+    borderColor: isDark ? colors.placeholder : '#464646'
+  }),
   gradient: {
     position: 'absolute',
     bottom: 0,
     width: '100%',
     height: '100%'
   },
-  employeeImgWrapper: {
+  employeeImgWrapper: (isDark: boolean, { colors }: PaperTheme) => ({
     width: 100,
     height: 100,
     borderWidth: 2.5,
-    borderColor: '#383838',
+    borderColor: isDark ? colors.placeholder : '#464646',
     borderRadius: 999,
     overflow: 'hidden'
-  },
-  content: {
+  }),
+  content: (isDark: boolean, { colors }: PaperTheme) => ({
     paddingTop: 50,
     paddingBottom: 30,
-    paddingHorizontal: 16
-  },
+    paddingHorizontal: 16,
+    ...isDark && { backgroundColor: colors.background }
+  }),
   titleWrapper: {
     paddingBottom: 30,
     alignItems: 'center'

@@ -1,9 +1,11 @@
 import React, { ComponentProps, FC } from 'react';
+import { useSelector } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { FilledTextField } from 'rn-material-ui-textfield';
 
 import { PaperTheme } from 'models';
+import { selectDarkMode } from 'store/core';
 
 type Props = ComponentProps<typeof FilledTextField> & {
   errorColorOnly?: boolean;
@@ -19,15 +21,17 @@ export const TextInput: FC<Props> = ({
 }) => {
 
   const theme = useTheme();
+  const darkMode = useSelector(selectDarkMode);
 
   return (
     <FilledTextField
       style={[styles.input(theme), style]}
       containerStyle={[errorColorOnly && styles.errorTextHidden, containerStyle]}
-      inputContainerStyle={[styles.inputContainer(theme), inputContainerStyle]}
+      inputContainerStyle={[styles.inputContainer(darkMode, theme), inputContainerStyle]}
       labelTextStyle={[styles.label, labelTextStyle]}
+      baseColor={darkMode ? 'rgba(255,255,255,0.3)' : theme.colors.placeholder}
+      textColor={theme.colors.text}
       tintColor={theme.colors.primary}
-      baseColor={theme.colors.placeholder}
       lineWidth={1}
       {...moreProps}
     />
@@ -36,14 +40,14 @@ export const TextInput: FC<Props> = ({
 };
 
 const styles = StyleSheet.create<any>({
-  inputContainer: ({ colors }: PaperTheme) => ({
+  inputContainer: (isDark: boolean, { colors }: PaperTheme) => ({
     paddingBottom: 4,
     height: 50,
     backgroundColor: colors.surface,
     borderTopWidth: 1,
     borderLeftWidth: 1,
     borderRightWidth: 1,
-    borderColor: 'rgba(0,0,0,0.2)'
+    borderColor: isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.2)'
   }),
   errorTextHidden: {
     width: '100%',

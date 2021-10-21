@@ -1,26 +1,35 @@
 import React, { FC } from 'react';
+import { useSelector } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
-import { Surface } from 'react-native-paper';
+import { Surface, useTheme } from 'react-native-paper';
 import { Placeholder, PlaceholderMedia, PlaceholderLine, Fade } from 'rn-placeholder';
 
-export const JobTitleItemSkeleton: FC = () => (
-  <Surface style={styles.wrapper}>
-    <Placeholder Animation={Fade} Left={() => <PlaceholderMedia style={styles.media} />}>
-      <View style={styles.content}>
-        <PlaceholderLine style={styles.line1} noMargin />
-      </View>
-    </Placeholder>
-  </Surface>
-);
+import { PaperTheme } from 'models';
+import { selectDarkMode } from 'store/core';
 
-const styles = StyleSheet.create({
-  wrapper: {
-    borderColor: '#e5e5e5',
+export const JobTitleItemSkeleton: FC = () => {
+  const theme = useTheme();
+  const darkMode = useSelector(selectDarkMode);
+
+  return (
+    <Surface style={styles.wrapper(theme)}>
+      <Placeholder Animation={Fade} Left={() => <PlaceholderMedia style={[styles.media, darkMode && styles.dark]} />}>
+        <View style={[styles.content, darkMode && styles.dark]}>
+          <PlaceholderLine style={styles.line1} noMargin />
+        </View>
+      </Placeholder>
+    </Surface>
+  );
+};
+
+const styles = StyleSheet.create<any>({
+  wrapper: ({ colors }: PaperTheme) => ({
+    borderColor: colors.border,
     borderTopWidth: 1,
     borderBottomWidth: 1,
     height: 55,
     overflow: 'hidden'
-  },
+  }),
   media: {
     width: 16,
     height: 55,
@@ -35,5 +44,8 @@ const styles = StyleSheet.create({
   line1: {
     width: '80%',
     height: 14
+  },
+  dark: {
+    opacity: 0.1
   }
 });

@@ -3,6 +3,8 @@ import { lightColors } from 'config/core';
 
 import ArrowListAscendingSvg from 'assets/svgs/arrow-up-short-wide.svg';
 import ArrowListDescendingSvg from 'assets/svgs/arrow-down-wide-short.svg';
+import CaretDownSvg from 'assets/svgs/caret-down.svg';
+import CaretUpSvg from 'assets/svgs/caret-up.svg';
 import CircleXmarkSvg from 'assets/svgs/circle-xmark.svg';
 import DoorOpenSvg from 'assets/svgs/door-open.svg';
 import EllipsisStrokeVerticalSvg from 'assets/svgs/ellipsis-stroke-vertical.svg';
@@ -29,6 +31,8 @@ import XmarkSvg from 'assets/svgs/xmark.svg';
 export enum IconName {
   ARROW_LIST_ASCENDING = 'arrow_list_ascending',
   ARROW_LIST_DESCENDING = 'arrow_list_descending',
+  CARET_DOWN = 'caret_down',
+  CARET_UP = 'caret_up',
   CIRCLE_XMARK = 'circle_xmark',
   DOOR_OPEN = 'door_open',
   ELLIPSIS_STROKE_VERTICAL = 'ellipsis_stroke_vertical',
@@ -60,6 +64,10 @@ const getSvg = (name: IconName | string) => {
       return ArrowListAscendingSvg;
     case IconName.ARROW_LIST_DESCENDING:
       return ArrowListDescendingSvg;
+    case IconName.CARET_DOWN:
+      return CaretDownSvg;
+    case IconName.CARET_UP:
+      return CaretUpSvg;
     case IconName.CIRCLE_XMARK:
       return CircleXmarkSvg;
     case IconName.DOOR_OPEN:

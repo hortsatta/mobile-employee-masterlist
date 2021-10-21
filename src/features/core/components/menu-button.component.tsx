@@ -21,8 +21,9 @@ export const MenuButton: FC<Props> = ({ containerStyle, icon, iconName, label, o
   const { scaleAnimatedStyle, animateScale } = useAnimatedScale();
 
   const handlePress = () => {
+    if (!onPress) { return; }
     animateScale();
-    onPress && onPress();
+    onPress();
   };
 
   return (

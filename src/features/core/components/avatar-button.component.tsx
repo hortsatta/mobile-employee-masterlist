@@ -4,6 +4,7 @@ import { Image, Pressable, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { Employee, Gender } from 'models';
+import { selectDarkMode } from 'store/core';
 import { selectAuthLoading, selectCurrentEmployee } from 'store/auth';
 import { useAnimatedScale } from '../hooks';
 
@@ -37,6 +38,7 @@ const EmployeePicture: FC<{ employee?: Employee }> = ({ employee }) => {
 };
 
 export const AvatarButton: FC<Props> = ({ onPress }) => {
+  const darkMode = useSelector(selectDarkMode);
   const currentEmployee = useSelector(selectCurrentEmployee);
   const authLoading = useSelector(selectAuthLoading);
 
@@ -54,29 +56,29 @@ export const AvatarButton: FC<Props> = ({ onPress }) => {
 
   return (
     <Pressable style={styles.pressable} onPress={handlePress}>
-      <Animated.View style={[styles.menu, scaleAnimatedStyle]}>
+      <Animated.View style={[styles.menu(darkMode), scaleAnimatedStyle]}>
         <EmployeePicture employee={currentEmployee} />
       </Animated.View>
     </Pressable>
   );
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create<any>({
   pressable: {
     paddingTop: 16,
     paddingHorizontal: 16
   },
-  menu: {
+  menu: (isDark: boolean) => ({
     justifyContent: 'flex-end',
     alignItems: 'center',
     width: 50,
     height: 50,
     backgroundColor: '#cccccc',
     borderWidth: 1,
-    borderColor: '#808080',
+    borderColor: isDark ? '#000000' : '#808080',
     borderRadius: 999,
     overflow: 'hidden'
-  },
+  }),
   image: {
     width: '100%',
     height: '100%',

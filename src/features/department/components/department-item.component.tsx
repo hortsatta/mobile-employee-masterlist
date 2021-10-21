@@ -25,7 +25,7 @@ export const DepartmentItem: FC<Props> = ({ style, item, index, loading }) => {
           <ActivityIndicator />
         </View>
       )}
-      <View style={styles.indexWrapper}>
+      <View style={styles.indexWrapper(theme)}>
         <Text style={styles.index}>{formattedIndex}</Text>
       </View>
       <View style={styles.titleWrapper}>
@@ -44,7 +44,7 @@ const styles = StyleSheet.create<any>({
     width: '100%',
     height: 55,
     backgroundColor: colors.surface,
-    borderColor: '#e5e5e5',
+    borderColor: colors.border,
     borderTopWidth: 1,
     borderBottomWidth: 1,
     overflow: 'hidden'
@@ -58,11 +58,11 @@ const styles = StyleSheet.create<any>({
     backgroundColor: 'rgba(0,0,0,0.2)',
     zIndex: 1
   },
-  indexWrapper: {
+  indexWrapper: ({ colors }: PaperTheme) => ({
     width: 16,
     height: '100%',
-    backgroundColor: '#dddddd'
-  },
+    backgroundColor: colors.index
+  }),
   index: {
     position: 'absolute',
     right: -23,
