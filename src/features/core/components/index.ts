@@ -19,6 +19,7 @@ export * from './picker-select.component';
 export * from './refresh-control.component';
 export * from './stage-flat-list.component';
 export * from './stage-scroll-view.component';
+export * from './stage-section-list.component';
 export * from './stage-view.component';
 export * from './sub-header.component';
 export * from './text.component';
