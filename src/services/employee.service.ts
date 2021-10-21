@@ -332,14 +332,7 @@ const createLocalEmployee = async (formData: EmployeeFormData): Promise<Employee
     department,
     jobTitle,
     salary,
-    // Replace personal info's birth date
     personalInfo,
-    //   ...personalInfo,
-    //   birthDate: {
-    //     date: birthDate.toISOString(),
-    //     shortDate: dayjs(birthDate).format('MM-DD')
-    //   }
-    // },
     pageKey: {
       fullName: `${firstName}_${middleInitial}_${lastName}_${employeeId}`,
       hireDate: `${dayjs(hireDate).format('YYYY-MM-DD')}_${employeeId}`

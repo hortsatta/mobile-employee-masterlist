@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/core';
 import { Route } from '@react-navigation/routers';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Surface } from 'react-native-paper';
 import Animated, {
   useAnimatedScrollHandler,
@@ -12,12 +12,14 @@ import Animated, {
   useAnimatedStyle
 } from 'react-native-reanimated';
 
-import { appRoutes } from 'config/core';
+import { appRoutes, darkColors } from 'config/core';
 import { selectDarkMode } from 'store/core';
 import {
   selectSelectedEmployee,
   refreshEmployeeStart,
-  setSelectedEmployee
+  setSelectedEmployee,
+  fetchEmployeeByIdStart,
+  selectEmployeeLoading
 } from 'store/employee';
 import { Icon, IconName } from 'features/core/components';
 import { EmployeeCoverImage, EmployeeDetail } from '../components';
@@ -56,10 +58,10 @@ export const EmployeeDetailScene: FC<Props> = ({ route }) => {
   const { navigate, setOptions } = useNavigation<any>();
   const isDark = useSelector(selectDarkMode);
   const selectedEmployee = useSelector(selectSelectedEmployee);
+  const loading = useSelector(selectEmployeeLoading);
   const dispatch = useDispatch();
   const scrollY = useSharedValue(0);
   const [isScrolling, setIsScrolling] = useState(false);
-  const [isReturn, setIsReturn] = useState(false);
 
   useEffect(() => {
     setOptions({
@@ -69,19 +71,22 @@ export const EmployeeDetailScene: FC<Props> = ({ route }) => {
           isDark={isDark}
           onPress={() => {
             props.onPress();
-            setIsReturn(true);
           }}
         />
       )
     });
 
     return () => {
-      isReturn && dispatch(setSelectedEmployee());
+      dispatch(setSelectedEmployee());
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
+    if (!selectedEmployee) {
+      dispatch(fetchEmployeeByIdStart(id));
+    }
+
     setOptions({
       headerRight: (props: any) => (
         <HeaderRight
@@ -95,8 +100,9 @@ export const EmployeeDetailScene: FC<Props> = ({ route }) => {
   }, [selectedEmployee]);
 
   useEffect(() => {
+    if (selectedEmployee) { return; }
     dispatch(refreshEmployeeStart(id));
-  }, [dispatch, id]);
+  }, [dispatch, id, selectedEmployee]);
 
   const handleScroll = useAnimatedScrollHandler({
     onScroll: (event: any) => {
@@ -119,23 +125,39 @@ export const EmployeeDetailScene: FC<Props> = ({ route }) => {
   return (
     <>
       <View>
-        <Animated.View style={coverImageAnimatedStyle}>
-          <EmployeeCoverImage
-            departmentId={selectedEmployee?.department?.departmentId || ''}
-          />
-        </Animated.View>
-        <Animated.ScrollView
-          scrollEventThrottle={16}
-          onScroll={handleScroll}
-        >
-          {selectedEmployee && (
-            <EmployeeDetail
-              employee={selectedEmployee}
-              scrollY={scrollY}
-              isScrolling={isScrolling}
-            />
-          )}
-        </Animated.ScrollView>
+        {
+          loading
+            ? (
+              <View style={styles.loading}>
+                <ActivityIndicator
+                  size={60}
+                  color={darkColors.primary}
+                />
+              </View>
+            )
+            : (
+              <>
+                <Animated.View style={coverImageAnimatedStyle}>
+                  <EmployeeCoverImage
+                    departmentId={selectedEmployee?.department?.departmentId || ''}
+                  />
+                </Animated.View>
+                <Animated.ScrollView
+                  scrollEventThrottle={16}
+                  onScroll={handleScroll}
+                >
+                  {selectedEmployee && (
+                    <EmployeeDetail
+                      employee={selectedEmployee}
+                      scrollY={scrollY}
+                      isScrolling={isScrolling}
+                    />
+                  )}
+                </Animated.ScrollView>
+              </>
+            )
+        }
+
       </View>
       <StatusBar backgroundColor='transparent' style='dark' />
     </>
@@ -152,5 +174,11 @@ const styles = StyleSheet.create<any>({
     borderColor: isDark ? '#fff' : '#000',
     borderRadius: 99,
     overflow: 'hidden'
-  })
+  }),
+  loading: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%'
+  }
 });

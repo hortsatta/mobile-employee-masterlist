@@ -1,4 +1,4 @@
-import React, { ComponentProps, FC, useContext } from 'react';
+import React, { ComponentProps, FC, useContext, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Animated as RNAnimated, StyleSheet, View } from 'react-native';
 import { IconButton, useTheme } from 'react-native-paper';
@@ -57,17 +57,20 @@ export const Header: FC<Props> = ({
   onRightPress
 }) => {
 
+  const { name: routeName } = route;
   const { top: insetTop } = useSafeAreaInsets();
   const theme = useTheme();
   const { headerY } = useContext(HeaderContext);
   const isUserSignedIn = useSelector(selectIsUserSignedIn);
+  const showUserInfo = useMemo(() => (
+    (routeName === appRoutes.menuNavigator.path)
+    || (routeName === appRoutes.userAccount.path)
+  ), [routeName]);
 
   const userInfoAnimatedStyle = {
-    opacity: route.name === appRoutes.menuNavigator.path
-      ? RNAnimated.add(progress.current, progress.next || 0).interpolate({
-        inputRange: [0, 1, 2],
-        outputRange: [0, 1, 0]
-      }) : 0
+    opacity: RNAnimated
+      .add(progress.current, progress.next || 0)
+      .interpolate({ inputRange: [0, 1, 2], outputRange: [0, 1, 0] })
   };
 
   const wrapperAnimatedStyle = useAnimatedStyle(() => ({
@@ -95,7 +98,7 @@ export const Header: FC<Props> = ({
           : (
             <View style={styles.avatarWrapper}>
               <AvatarButton onPress={onLeftPress || toggleMainMenu} />
-              <HeaderUserInfo style={[styles.userInfo, userInfoAnimatedStyle]} />
+              <HeaderUserInfo style={[styles.userInfo, showUserInfo ? userInfoAnimatedStyle : styles.hidden]} />
             </View>
           )
       }
@@ -120,5 +123,8 @@ const styles = StyleSheet.create<any>({
   },
   userInfo: {
     paddingTop: 18
+  },
+  hidden: {
+    opacity: 0
   }
 });

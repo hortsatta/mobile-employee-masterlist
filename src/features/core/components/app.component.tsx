@@ -9,6 +9,7 @@ import AppLoading from 'expo-app-loading';
 
 import { fontAssets, getNavTheme, getPaperTheme } from 'config/core';
 import { selectDarkMode, selectNotificationMessages } from 'store/core';
+import { fetchAllUserRolesStart } from 'store/user';
 import { fetchAllDepartmentsStart } from 'store/department';
 import { fetchAllJobTitlesStart } from 'store/job-title';
 import { checkSignInSession, selectIsUserSignedIn } from 'store/auth';
@@ -40,6 +41,7 @@ export const App: FC = () => {
 
   useEffect(() => {
     if (!isUserSignedIn) { return; }
+    dispatch(fetchAllUserRolesStart());
     dispatch(fetchAllDepartmentsStart());
     dispatch(fetchAllJobTitlesStart());
   }, [dispatch, isUserSignedIn]);

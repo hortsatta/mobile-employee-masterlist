@@ -39,6 +39,7 @@ export const DepartmentListFilterOptions: FC<Props> = ({ style, searchKeyword, o
     <View style={[styles.wrapper(theme), style]}>
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Filter</Text>
+        <Divider />
       </View>
       <Controller
         name='searchKeyword'
@@ -46,7 +47,6 @@ export const DepartmentListFilterOptions: FC<Props> = ({ style, searchKeyword, o
         render={
           ({ field: { value, onChange, onBlur } }) => (
             <TextInput
-              containerStyle={styles.search}
               label='Find Department'
               returnKeyType='done'
               value={value}
@@ -103,9 +103,6 @@ const styles = StyleSheet.create<any>({
     textTransform: 'uppercase',
     letterSpacing: -0.5,
     opacity: 0.5
-  },
-  search: {
-    marginBottom: 0
   },
   searchIcon: {
     justifyContent: 'center',

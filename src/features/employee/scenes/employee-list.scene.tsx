@@ -115,7 +115,6 @@ const EmployeeListSceneComponent: FC = () => {
   };
 
   const navigateEmployeeDetail = (employee: Employee) => {
-    // const { navigate } = getParent() as any;
     // Set selected employee id, and push to employee detail route
     dispatch(setSelectedEmployee(employee.id));
     navigate(appRoutes.employeeStack.path, {
@@ -223,7 +222,7 @@ const EmployeeListSceneComponent: FC = () => {
       />
       <BottomSheetScrollView
         show={showFilters}
-        snapPoints={['55%']}
+        snapPoints={['55%', '100%']}
         onClose={() => setShowFilters(false)}
       >
         <EmployeeListFilterOptions

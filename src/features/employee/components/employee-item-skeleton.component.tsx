@@ -5,7 +5,7 @@ import { Placeholder, PlaceholderMedia, PlaceholderLine, Fade } from 'rn-placeho
 
 export const EmployeeItemSkeleton: FC = () => (
   <Surface style={styles.wrapper}>
-    <Placeholder Animation={Fade} Left={() => <PlaceholderMedia style={styles.media}/>}>
+    <Placeholder Animation={Fade} Left={() => <PlaceholderMedia style={styles.media} />}>
       <View style={styles.content}>
         <PlaceholderLine style={styles.line1} noMargin />
         <PlaceholderLine style={styles.line2} noMargin />

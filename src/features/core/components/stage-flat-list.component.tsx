@@ -22,7 +22,6 @@ export const StageFlatList: FC<Props> = ({
   floatingChildren,
   keyboardAware,
   withSubHeader,
-  children,
   ...moreProps
 }) => {
 
@@ -50,9 +49,7 @@ export const StageFlatList: FC<Props> = ({
         scrollEventThrottle={16}
         onScroll={onScroll}
         {...moreProps}
-      >
-        {children}
-      </FlatList>
+      />
       {floatingChildren}
     </View>
   );

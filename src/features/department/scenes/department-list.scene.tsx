@@ -103,7 +103,7 @@ const DepartmentListSceneComponent: FC = () => {
     <>
       <StageFlatList
         contentContainerStyle={styles.wrapper}
-        data={(!departmentLoading && !debounceLoading) ? departments : placeholderData}
+        data={!(departmentLoading || debounceLoading) ? departments : placeholderData}
         renderItem={({ item, index }) => (
           (departmentLoading || refreshing || debounceLoading)
             ? <Placeholder />
@@ -123,9 +123,12 @@ const DepartmentListSceneComponent: FC = () => {
             keyword={searchKeyword}
             sortBy='Department Name'
             orderBy={SortBy.ASC}
-          />}
+          />
+        }
         ListFooterComponentStyle={styles.footer}
-        ListFooterComponent={<Fin show={!departmentLoading} />}
+        ListFooterComponent={
+          <Fin show={!(departmentLoading || refreshing || debounceLoading)} />
+        }
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -139,7 +142,7 @@ const DepartmentListSceneComponent: FC = () => {
       />
       <BottomSheetScrollView
         show={showFilters}
-        snapPoints={['55%']}
+        snapPoints={['55%', '100%']}
         onClose={() => setShowFilters(false)}
       >
         <DepartmentListFilterOptions

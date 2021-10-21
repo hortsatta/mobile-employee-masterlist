@@ -1,13 +1,14 @@
 import React, { FC } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TextStyle } from 'react-native';
 import { Text } from './text.component';
 
 type Props = {
   show: boolean;
+  style?: TextStyle;
 }
 
-export const Fin: FC<Props> = ({ show }) => (
-  show ? <Text style={styles.text}>fin.</Text> : null
+export const Fin: FC<Props> = ({ style, show }) => (
+  show ? <Text style={[styles.text, style]}>fin.</Text> : null
 );
 
 const styles = StyleSheet.create({

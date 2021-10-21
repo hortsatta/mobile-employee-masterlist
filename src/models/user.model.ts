@@ -9,8 +9,10 @@ type User = AuditTrail & {
 }
 
 type UserRole = AuditTrail & {
+  id: string;
   name: string;
   value: number;
+  isActive: boolean;
 }
 
 export type { User, UserRole };

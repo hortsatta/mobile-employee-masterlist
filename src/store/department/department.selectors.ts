@@ -19,12 +19,13 @@ const selectAllDepartmentEntities = createSelector(
 const selectDepartmentsByKeyword = createSelector(
   selectDepartmentState,
   selectAllDepartments,
-  (state, departments) => (
-    departments.filter(d => (
-      d.name.toLowerCase().includes(state.searchKeyword || '')
-      || d.alias.toLowerCase().includes(state.searchKeyword || '')
-    ))
-  )
+  (state, departments) => {
+    const keyword = state.searchKeyword?.toLocaleUpperCase() || '';
+    return departments.filter(d => (
+      d.name.toLowerCase().includes(keyword)
+      || d.alias.toLowerCase().includes(keyword)
+    ));
+  }
 );
 
 const selectTotalDepartmentCount = createSelector(

@@ -63,6 +63,7 @@ const EmployeeListFilterOptions: FC<Props> = ({ style, filters, onSubmit }) => {
     <View style={[styles.wrapper(theme), style]}>
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Filter & Sort By</Text>
+        <Divider />
       </View>
       <Controller
         name='searchKeyword'
@@ -166,7 +167,7 @@ const styles = StyleSheet.create<any>({
     backgroundColor: colors.background
   }),
   divider: {
-    marginTop: 36,
+    marginTop: 30,
     marginBottom: 8
   },
   section: {

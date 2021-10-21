@@ -8,8 +8,9 @@ import { useTheme } from 'react-native-paper';
 
 import { appRoutes, shadowElevations } from 'config/core';
 import { PaperTheme } from 'models';
-import { DepartmentNavigator } from 'features/department/navigation';
 import { SubHeader } from 'features/core/components';
+import { DepartmentNavigator } from 'features/department/navigation';
+import { JobTitleNavigator } from 'features/job-title/navigation';
 import { EmployeeListScene, UpsertEmployeeScene } from '../scenes';
 
 import EmployeesSvg from 'assets/svgs/employees.svg';
@@ -30,7 +31,7 @@ const getSvg = (name: string) => {
       return EmployeesSvg;
     case appRoutes.department.path:
       return HierarchySvg;
-    case appRoutes.jobTitleList.path:
+    case appRoutes.jobTitle.path:
       return KingSvg;
     case appRoutes.upsertEmployee.path:
       return WandSvg;
@@ -38,7 +39,7 @@ const getSvg = (name: string) => {
       return EmployeesGrayscaleSvg;
     case `${appRoutes.department.path}_grayscale`:
       return HierarchyGrayscaleSvg;
-    case `${appRoutes.jobTitleList.path}_grayscale`:
+    case `${appRoutes.jobTitle.path}_grayscale`:
       return KingGrayscaleSvg;
     case `${appRoutes.upsertEmployee.path}_grayscale`:
       return WandGrayscaleSvg;
@@ -97,9 +98,9 @@ export const EmployeeTabNavigator: FC = () => {
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name={appRoutes.jobTitleList.path}
-        component={JobTitleList}
-        options={{ title: appRoutes.jobTitleList.name }}
+        name={appRoutes.jobTitle.path}
+        component={JobTitleNavigator}
+        options={{ headerShown: false }}
       />
     </Tab.Navigator>
   );
@@ -132,6 +133,3 @@ const styles = StyleSheet.create<any>({
     borderTopColor: 'rgba(0,0,0,0.05)'
   })
 });
-
-// TEMPO
-const JobTitleList: FC = () => null;

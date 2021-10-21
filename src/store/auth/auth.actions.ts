@@ -31,7 +31,6 @@ const signInFailure = createAction(
   AuthActionType.SIGN_IN_FAILURE
 );
 
-
 const signOutStart = createAction(
   AuthActionType.SIGN_OUT_START
 );

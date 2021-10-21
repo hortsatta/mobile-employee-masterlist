@@ -30,7 +30,7 @@ export const DepartmentItem: FC<Props> = ({ style, item, index, loading }) => {
       </View>
       <View style={styles.titleWrapper}>
         <Text style={styles.name}>{departmentName}</Text>
-        <Text style={styles.alias}>Short — {alias}</Text>
+        <Text style={styles.alias}>— {alias}</Text>
       </View>
     </View>
   );
