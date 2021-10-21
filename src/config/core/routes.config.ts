@@ -54,8 +54,17 @@ export const appRoutes: any = {
     name: 'New Department',
     path: 'upsert_department'
   },
+  // Job Title
+  jobTitle: {
+    name: 'Job Titles',
+    path: 'job_title'
+  },
   jobTitleList: {
-    name: 'Job Title List',
+    name: 'Job Titles',
     path: 'job_title_list'
+  },
+  upsertJobTitle: {
+    name: 'New Job Title',
+    path: 'upsert_job_title'
   }
 };
