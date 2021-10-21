@@ -1,3 +1,4 @@
+import { PayloadAction } from '@reduxjs/toolkit';
 import { SagaIterator } from 'redux-saga';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 
@@ -9,10 +10,12 @@ import {
   fetchAllJobTitlesSuccess
 } from './job-title.actions';
 
-function* allJobTitlesStartWorker(): SagaIterator<void> {
+function* allJobTitlesStartWorker(action: PayloadAction<any>): SagaIterator<void> {
   try {
     const jobTitles = yield call(getAllJobTitles);
     yield put(fetchAllJobTitlesSuccess(jobTitles));
+    // Invoke callback
+    action.payload && action.payload();
   } catch (error: any) {
     yield put(fetchAllJobTitlesFailure());
     yield put(appendNotificationMessages({

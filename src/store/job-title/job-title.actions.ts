@@ -9,7 +9,8 @@ export enum JobTitleActionType {
 }
 
 const fetchAllJobTitlesStart = createAction(
-  JobTitleActionType.FETCH_ALL_JOB_TITLES_START
+  JobTitleActionType.FETCH_ALL_JOB_TITLES_START,
+  (callback?: () => void) => ({ payload: callback })
 );
 
 const fetchAllJobTitlesSuccess = createAction(
