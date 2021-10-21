@@ -2,7 +2,9 @@ import React, { FC, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Badge, IconButton, useTheme } from 'react-native-paper';
 
+import { DepartmeRbacType } from 'config/rbac';
 import { PaperTheme } from 'models';
+import { useGuard } from 'features/core/hooks';
 import {
   Button,
   ContextMenu,
@@ -33,6 +35,7 @@ export const DepartmentListHeaderRight: FC<Props> = ({
   // const { navigate } = useNavigation();
   const theme = useTheme();
   const [showMenu, setShowMenu] = useState(false);
+  const { canActivate } = useGuard();
 
   const handleDismiss = () => setShowMenu(false);
 
@@ -77,26 +80,29 @@ export const DepartmentListHeaderRight: FC<Props> = ({
             />
           )
       }
-      <ContextMenu
-        visible={showMenu}
-        onShow={() => setShowMenu(true)}
-        onDismiss={handleDismiss}
-      >
-        {/* <ContextMenuItem
-          contentStyle={styles.menuItem}
-          titleStyle={styles.menuTitle(theme)}
-          icon={IconName.SQUARE_PLUS}
-          title='New Department'
-          onPress={handleNewDepartmentPress}
-        /> */}
-        <ContextMenuItem
-          contentStyle={styles.menuItem}
-          titleStyle={styles.menuTitle(theme)}
-          icon={IconName.SQUARE_CHECK}
-          title='Multiple Selection'
-          onPress={handleBatchPress}
-        />
-      </ContextMenu>
+      {
+        canActivate([DepartmeRbacType.CREATE, DepartmeRbacType.UPDATE]) && (
+          <ContextMenu
+            visible={showMenu}
+            onShow={() => setShowMenu(true)}
+            onDismiss={handleDismiss}
+          >
+            {/* <ContextMenuItem
+              contentStyle={styles.menuItem}
+              titleStyle={styles.menuTitle(theme)}
+              icon={IconName.SQUARE_PLUS}
+              title='New Department'
+              onPress={handleNewDepartmentPress}
+            /> */}
+            <ContextMenuItem
+              contentStyle={styles.menuItem}
+              titleStyle={styles.menuTitle(theme)}
+              icon={IconName.SQUARE_CHECK}
+              title='Multiple Selection'
+              onPress={handleBatchPress}
+            />
+          </ContextMenu>)
+      }
     </>
   );
 

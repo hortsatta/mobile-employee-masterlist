@@ -8,6 +8,7 @@ import { useTheme } from 'react-native-paper';
 
 import { appRoutes, shadowElevations } from 'config/core';
 import { PaperTheme } from 'models';
+import { useGuard } from 'features/core/hooks';
 import { SubHeader } from 'features/core/components';
 import { DepartmentNavigator } from 'features/department/navigation';
 import { JobTitleNavigator } from 'features/job-title/navigation';
@@ -22,6 +23,7 @@ import KingGrayscaleSvg from 'assets/svgs/king-grayscale.svg';
 import TabVSvg from 'assets/svgs/tab-v.svg';
 import WandSvg from 'assets/svgs/wand.svg';
 import WandGrayscaleSvg from 'assets/svgs/wand-grayscale.svg';
+import { EmployeeRbacType } from 'config/rbac';
 
 const TAB_BAR_ICON_SIZE = 30;
 
@@ -50,8 +52,13 @@ const getSvg = (name: string) => {
 
 const Tab = createBottomTabNavigator();
 
+const DisabledTabBarButton: FC = (props: any) => (
+  <View {...props} style={[...props.style, styles.disabled]} />
+);
+
 export const EmployeeTabNavigator: FC = () => {
   const theme = useTheme();
+  const { canActivate } = useGuard();
 
   return (
     <Tab.Navigator
@@ -89,7 +96,9 @@ export const EmployeeTabNavigator: FC = () => {
         component={UpsertEmployeeScene}
         options={{
           title: appRoutes.upsertEmployee.name,
-          unmountOnBlur: true
+          unmountOnBlur: true,
+          ...!canActivate([EmployeeRbacType.CREATE, EmployeeRbacType.UPDATE])
+            && { tabBarButton: props => <DisabledTabBarButton {...props} /> }
         }}
       />
       <Tab.Screen
@@ -131,5 +140,8 @@ const styles = StyleSheet.create<any>({
     backgroundColor: colors.background,
     borderTopWidth: 1,
     borderTopColor: 'rgba(0,0,0,0.05)'
-  })
+  }),
+  disabled: {
+    opacity: 0.4
+  }
 });

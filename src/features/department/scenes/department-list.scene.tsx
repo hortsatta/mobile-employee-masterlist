@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/core';
 import { StyleSheet, View } from 'react-native';
 
+import { DepartmeRbacType } from 'config/rbac';
 import { Department, GridMode, SortBy } from 'models';
 import {
   fetchAllDepartmentsStart,
@@ -11,6 +12,7 @@ import {
   setDepartmentFilters,
   selectDepartmentsByKeyword
 } from 'store/department';
+import { useDebounce, useGuard } from 'features/core/hooks';
 import {
   ActiveFiltersHeader,
   BottomSheetScrollView,
@@ -27,7 +29,14 @@ import {
   DepartmentListFilterOptions,
   DepartmentListHeaderRight
 } from '../components';
-import { useDebounce } from 'features/core/hooks';
+
+type ListItemProps = {
+  index: number;
+  item: any;
+  gridMode: GridMode;
+  onLongPress: (append: boolean) => void;
+  canActivate: boolean;
+}
 
 const placeholderData = [{ id: '1' }, { id: '2' }];
 
@@ -39,9 +48,24 @@ const Placeholder: FC = () => (
   </View>
 );
 
+const ListItem: FC<ListItemProps> = ({ index, item, gridMode, onLongPress, canActivate }) => (
+  canActivate
+    ? (
+      <GridListItem isBatchMode={gridMode === GridMode.BATCH} onLongPress={onLongPress}>
+        <DepartmentItem index={index} item={item} />
+      </GridListItem>
+    )
+    : (
+      <GridListItem isBatchMode={false}>
+        <DepartmentItem index={index} item={item} />
+      </GridListItem>
+    )
+);
+
 const DepartmentListSceneComponent: FC = () => {
   const dispatch = useDispatch();
   const { setOptions } = useNavigation() as any;
+  const { canActivate } = useGuard();
   const { debounce, loading: debounceLoading } = useDebounce();
   const departments = useSelector(selectDepartmentsByKeyword);
   const searchKeyword = useSelector(selectDepartmentSearchKeyword);
@@ -108,12 +132,13 @@ const DepartmentListSceneComponent: FC = () => {
           (departmentLoading || refreshing || debounceLoading)
             ? <Placeholder />
             : (
-              <GridListItem
-                isBatchMode={gridMode === GridMode.BATCH}
+              <ListItem
+                index={index}
+                item={item}
+                gridMode={gridMode}
                 onLongPress={(append: boolean) => handleDepartmentItemLongPress(append, item)}
-              >
-                <DepartmentItem index={index} item={item} />
-              </GridListItem>
+                canActivate={canActivate([DepartmeRbacType.CREATE, DepartmeRbacType.UPDATE])}
+              />
             )
         )}
         ItemSeparatorComponent={GridItemSeparator}

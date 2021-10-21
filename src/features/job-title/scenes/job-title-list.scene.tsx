@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/core';
 import { StyleSheet, View } from 'react-native';
 import { Divider } from 'react-native-paper';
 
+import { JobTitleRbacType } from 'config/rbac';
 import { GridMode, JobTitle, SortBy } from 'models';
 import { selectAllDepartmentEntities } from 'store/department';
 import {
@@ -13,7 +14,7 @@ import {
   selectJobTitleLoading,
   setJobTitleFilters
 } from 'store/job-title';
-import { useDebounce } from 'features/core/hooks';
+import { useDebounce, useGuard } from 'features/core/hooks';
 import {
   ActiveFiltersHeader,
   BottomSheetScrollView,
@@ -31,6 +32,14 @@ import {
   JobTitleListFilterOptions,
   JobTitleListHeaderRight
 } from '../components';
+
+type ListItemProps = {
+  index: number;
+  item: any;
+  gridMode: GridMode;
+  onLongPress: (append: boolean) => void;
+  canActivate: boolean;
+}
 
 const placeholderData = [{
   departmentId: '',
@@ -54,9 +63,24 @@ const SectionHeader: FC = ({ children }) => (
   </View>
 );
 
+const ListItem: FC<ListItemProps> = ({ index, item, gridMode, onLongPress, canActivate }) => (
+  canActivate
+    ? (
+      <GridListItem isBatchMode={gridMode === GridMode.BATCH} onLongPress={onLongPress}>
+        <JobTitleItem index={index} item={item} />
+      </GridListItem>
+    )
+    : (
+      <GridListItem isBatchMode={false}>
+        <JobTitleItem index={index} item={item} />
+      </GridListItem>
+    )
+);
+
 const JobTitleListSceneComponent: FC = () => {
   const dispatch = useDispatch();
   const { setOptions } = useNavigation() as any;
+  const { canActivate } = useGuard();
   const { debounce, loading: debounceLoading } = useDebounce();
   const departments = useSelector(selectAllDepartmentEntities);
   const jobTitles = useSelector(selectFilteredJobTitlesGroupedByDepartment);
@@ -138,12 +162,13 @@ const JobTitleListSceneComponent: FC = () => {
           (jobTitleLoading || refreshing || debounceLoading)
             ? <Placeholder />
             : (
-              <GridListItem
-                isBatchMode={gridMode === GridMode.BATCH}
+              <ListItem
+                index={index}
+                item={item}
+                gridMode={gridMode}
                 onLongPress={(append: boolean) => handleJobTitleItemLongPress(append, item)}
-              >
-                <JobTitleItem index={index} item={item} />
-              </GridListItem>
+                canActivate={canActivate([JobTitleRbacType.CREATE, JobTitleRbacType.UPDATE])}
+              />
             )
         )}
         renderSectionHeader={({ section: { departmentId } }) => (
@@ -208,8 +233,7 @@ const styles = StyleSheet.create({
     opacity: 0.5
   },
   header: {
-    paddingTop: 8,
-    paddingBottom: 16
+    paddingTop: 8
   },
   footer: {
     paddingTop: 5

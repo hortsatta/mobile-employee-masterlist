@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/core';
 import { StyleSheet, View } from 'react-native';
 
 import { Employee, EmployeePageKey, GridMode, SortBy } from 'models';
+import { EmployeeRbacType } from 'config/rbac';
 import { appRoutes } from 'config/core';
 import {
   fetchEmployeesByKeywordStart,
@@ -16,6 +17,7 @@ import {
   selectIsAllEmployeesLoaded,
   setSelectedEmployee
 } from 'store/employee';
+import { useGuard } from 'features/core/hooks';
 import {
   ActiveFiltersHeader,
   BottomSheetScrollView,
@@ -37,6 +39,15 @@ import {
   pageKeySelectItems
 } from '../components';
 
+type ListItemProps = {
+  index: number;
+  item: any;
+  gridMode: GridMode;
+  onPress: () => void;
+  onLongPress: (append: boolean) => void;
+  canActivate: boolean;
+}
+
 const placeholderData = [{ id: '1' }, { id: '2' }];
 
 const Placeholder: FC = () => (
@@ -47,9 +58,28 @@ const Placeholder: FC = () => (
   </View>
 );
 
+const ListItem: FC<ListItemProps> = ({ index, item, gridMode, onPress, onLongPress, canActivate }) => (
+  canActivate
+    ? (
+      <GridListItem
+        isBatchMode={gridMode === GridMode.BATCH}
+        onPress={onPress}
+        onLongPress={onLongPress}
+      >
+        <EmployeeItem index={index} item={item} />
+      </GridListItem>
+    )
+    : (
+      <GridListItem isBatchMode={false}>
+        <EmployeeItem index={index} item={item} />
+      </GridListItem>
+    )
+);
+
 const EmployeeListSceneComponent: FC = () => {
   const { navigate, setOptions } = useNavigation() as any;
   const dispatch = useDispatch();
+  const { canActivate } = useGuard();
   const employees = useSelector(selectAllEmployees);
   const currentPage = useSelector(selectCurrentPage);
   const pageLoading = useSelector(selectEmployeePageLoading);
@@ -170,13 +200,18 @@ const EmployeeListSceneComponent: FC = () => {
           (employeeLoading || refreshing)
             ? <Placeholder />
             : (
-              <GridListItem
-                isBatchMode={gridMode === GridMode.BATCH}
+              <ListItem
+                index={index}
+                item={item}
+                gridMode={gridMode}
                 onPress={() => navigateEmployeeDetail(item)}
                 onLongPress={(append: boolean) => handleEmployeeItemLongPress(append, item)}
-              >
-                <EmployeeItem index={index} item={item} />
-              </GridListItem>
+                canActivate={canActivate([
+                  EmployeeRbacType.CREATE,
+                  EmployeeRbacType.UPDATE,
+                  EmployeeRbacType.DETAIL_READ
+                ])}
+              />
             )
         )}
         ItemSeparatorComponent={GridItemSeparator}
@@ -209,12 +244,12 @@ const EmployeeListSceneComponent: FC = () => {
             withSubHeader
           />
         }
-        floatingChildren={
+        floatingChildren={canActivate([EmployeeRbacType.CREATE]) && (
           <FabButton
             iconName={IconName.PLUS}
             onPress={() => navigate(appRoutes.upsertEmployee.path)}
           />
-        }
+        )}
         onEndReachedThreshold={0.2}
         onEndReached={handleEndReached}
         showsVerticalScrollIndicator={false}

@@ -2,7 +2,9 @@ import React, { FC, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Badge, IconButton, useTheme } from 'react-native-paper';
 
+import { JobTitleRbacType } from 'config/rbac';
 import { PaperTheme } from 'models';
+import { useGuard } from 'features/core/hooks';
 import {
   Button,
   ContextMenu,
@@ -31,6 +33,7 @@ export const JobTitleListHeaderRight: FC<Props> = ({
 }) => {
 
   const theme = useTheme();
+  const { canActivate } = useGuard();
   const [showMenu, setShowMenu] = useState(false);
 
   const handleDismiss = () => setShowMenu(false);
@@ -71,19 +74,24 @@ export const JobTitleListHeaderRight: FC<Props> = ({
             />
           )
       }
-      <ContextMenu
-        visible={showMenu}
-        onShow={() => setShowMenu(true)}
-        onDismiss={handleDismiss}
-      >
-        <ContextMenuItem
-          contentStyle={styles.menuItem}
-          titleStyle={styles.menuTitle(theme)}
-          icon={IconName.SQUARE_CHECK}
-          title='Multiple Selection'
-          onPress={handleBatchPress}
-        />
-      </ContextMenu>
+      {
+        canActivate([JobTitleRbacType.CREATE, JobTitleRbacType.UPDATE])
+          && (
+            <ContextMenu
+              visible={showMenu}
+              onShow={() => setShowMenu(true)}
+              onDismiss={handleDismiss}
+            >
+              <ContextMenuItem
+                contentStyle={styles.menuItem}
+                titleStyle={styles.menuTitle(theme)}
+                icon={IconName.SQUARE_CHECK}
+                title='Multiple Selection'
+                onPress={handleBatchPress}
+              />
+            </ContextMenu>
+          )
+      }
     </>
   );
 

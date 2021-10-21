@@ -12,6 +12,7 @@ import Animated, {
   useAnimatedStyle
 } from 'react-native-reanimated';
 
+import { EmployeeRbacType } from 'config/rbac';
 import { appRoutes, darkColors } from 'config/core';
 import { selectDarkMode } from 'store/core';
 import {
@@ -21,6 +22,7 @@ import {
   fetchEmployeeByIdStart,
   selectEmployeeLoading
 } from 'store/employee';
+import { useGuard } from 'features/core/hooks';
 import { Icon, IconName } from 'features/core/components';
 import { EmployeeCoverImage, EmployeeDetail } from '../components';
 
@@ -56,6 +58,7 @@ const HeaderRight: FC<HeaderProps> = ({ isDark, onPress }) => (
 export const EmployeeDetailScene: FC<Props> = ({ route }) => {
   const { id } = route.params as any;
   const { navigate, setOptions } = useNavigation<any>();
+  const { canActivate } = useGuard();
   const isDark = useSelector(selectDarkMode);
   const selectedEmployee = useSelector(selectSelectedEmployee);
   const loading = useSelector(selectEmployeeLoading);
@@ -87,15 +90,16 @@ export const EmployeeDetailScene: FC<Props> = ({ route }) => {
       dispatch(fetchEmployeeByIdStart(id));
     }
 
-    setOptions({
-      headerRight: (props: any) => (
-        <HeaderRight
-          {...props}
-          isDark={isDark}
-          onPress={() => navigate(appRoutes.upsertEmployee.path)}
-        />
-      )
-    });
+    canActivate([EmployeeRbacType.CREATE, EmployeeRbacType.UPDATE])
+      && setOptions({
+        headerRight: (props: any) => (
+          <HeaderRight
+            {...props}
+            isDark={isDark}
+            onPress={() => navigate(appRoutes.upsertEmployee.path)}
+          />
+        )
+      });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedEmployee]);
 
