@@ -1,12 +1,7 @@
 import React, { FC } from 'react';
-import { Pressable, StyleSheet, ViewStyle } from 'react-native';
+import { Pressable, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSequence,
-  withTiming
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 
 import { PaperTheme } from 'models';
 import { useAnimatedScale } from '../hooks';
@@ -16,7 +11,7 @@ import { Text } from './text.component';
 type Props = {
   icon?: any;
   iconName?: IconName | string;
-  containerStyle?: ViewStyle;
+  containerStyle?: StyleProp<ViewStyle>;
   label?: string;
   onPress?: () => void;
 }

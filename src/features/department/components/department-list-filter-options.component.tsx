@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { Divider, IconButton, useTheme } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -13,7 +13,7 @@ type FormData = {
 }
 
 type Props = {
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   searchKeyword?: string;
   onSubmit?: (formData: FormData) => void;
 }

@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
 import { Text } from './text.component';
 
 type Props ={
-  style?: ViewStyle,
+  style?: StyleProp<ViewStyle>,
   keyword?: string;
   sortBy?: string;
   orderBy?: string;

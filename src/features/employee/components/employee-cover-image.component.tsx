@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { SvgProps } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -17,7 +17,7 @@ const enum DepartmentId {
 
 type Props = {
   departmentId: string;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   children?: ReactNode;
 }
 

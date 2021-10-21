@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
 
 import { fontSizes } from 'config/core';
@@ -9,7 +9,7 @@ import { Text } from 'features/core/components';
 type Props = {
   item: JobTitle;
   index: number;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   loading?: boolean;
 }
 

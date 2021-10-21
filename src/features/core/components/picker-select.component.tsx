@@ -1,12 +1,12 @@
 import React, { ComponentProps, FC } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 
 import { PaperTheme } from 'models';
 
 type Props = ComponentProps<typeof RNPickerSelect> & {
-  containerStyle?: ViewStyle;
+  containerStyle?: StyleProp<ViewStyle>;
   error?: any;
 }
 

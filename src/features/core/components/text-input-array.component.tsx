@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import { Control, Controller, UseFieldArrayReturn } from 'react-hook-form';
-import { KeyboardTypeOptions, StyleSheet, View, ViewStyle } from 'react-native';
+import { KeyboardTypeOptions, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { IconButton, useTheme } from 'react-native-paper';
 
 import { IconName } from './icon.component';
@@ -10,7 +10,7 @@ type Props = {
   name: string;
   control: Control<any>;
   fieldArray: UseFieldArrayReturn<any>;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   label?: string;
   keyboardType?: KeyboardTypeOptions | undefined;
 }

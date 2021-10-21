@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { Divider, IconButton, useTheme } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -24,7 +24,7 @@ type FormData = {
 
 type Props = {
   filters: any;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   onSubmit?: (formData: FormData) => void;
 }
 

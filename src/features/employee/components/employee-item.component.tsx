@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
 
 import { Employee, PaperTheme } from 'models';
@@ -13,7 +13,7 @@ import { EmployeeImage } from './employee-image.component';
 type Props = {
   item: Employee;
   index: number;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   loading?: boolean;
 }
 

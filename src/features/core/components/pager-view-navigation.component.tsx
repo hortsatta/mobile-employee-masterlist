@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { Divider, useTheme } from 'react-native-paper';
 
 import { PaperTheme } from 'models';
@@ -7,7 +7,7 @@ import { PaperTheme } from 'models';
 type Props = {
   currentPage: number;
   pageCount: number;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 }
 
 export const PagerViewNavigation: FC<Props> = ({ style, currentPage, pageCount }) => {
