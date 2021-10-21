@@ -1,21 +1,32 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { StackActions, useNavigation } from '@react-navigation/core';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StyleSheet, View } from 'react-native';
 
-import { appRoutes } from 'config/core';
+import { appRoutes, darkColors } from 'config/core';
+import { Gender } from 'models';
+import { selectDarkMode } from 'store/core';
+import { selectCurrentEmployee } from 'store/auth';
 import { GithubButton } from 'features/home/components';
 import { MenuButton, StageView } from '../components';
 
 import HouseSvg from 'assets/svgs/house.svg';
 import EmployeesSvg from 'assets/svgs/employees.svg';
 import OfficeLadySvg from 'assets/svgs/office-lady.svg';
+import OfficeGuySvg from 'assets/svgs/office-guy.svg';
 import GhostSvg from 'assets/svgs/ghost.svg';
 
 const ICON_SIZE = 70;
 
 export const MainMenuScene: FC<StackScreenProps<any>> = () => {
   const { dispatch, navigate, getParent } = useNavigation();
+  const darkMode = useSelector(selectDarkMode);
+  const currentEmployee = useSelector(selectCurrentEmployee);
+
+  const isFemale = useMemo(() => (
+    currentEmployee?.personalInfo.gender.toLowerCase() === Gender.FEMALE
+  ), [currentEmployee]);
 
   const smartNavigate = useCallback((routeName: string) => {
     const routes = getParent()?.getState().routes;
@@ -58,13 +69,17 @@ export const MainMenuScene: FC<StackScreenProps<any>> = () => {
             label='Account'
             icon={() => (
               <View style={styles.icon}>
-                <OfficeLadySvg width={ICON_SIZE} height={ICON_SIZE} />
+                {
+                  isFemale
+                    ? <OfficeLadySvg width={ICON_SIZE} height={ICON_SIZE} />
+                    : <OfficeGuySvg width={ICON_SIZE} height={ICON_SIZE} />
+                }
               </View>
             )}
             onPress={() => smartNavigate(appRoutes.userAccount.path)}
           />
           <MenuButton
-            containerStyle={styles.darkButton}
+            containerStyle={[styles.darkButton, darkMode && styles.active]}
             label='Dark'
             icon={() => (
               <View style={styles.icon}>
@@ -120,5 +135,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     position: 'absolute',
     bottom: 30
+  },
+  active: {
+    backgroundColor: darkColors.accent,
+    borderColor: 'rgba(0,0,0,0.5)'
   }
 });
