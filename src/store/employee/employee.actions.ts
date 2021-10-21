@@ -14,6 +14,10 @@ export enum EmployeeActionType {
   FETCH_EMPLOYEES_BY_KEYWORD_START = '[Employee] Fetch Employees By Keyword Start',
   FETCH_EMPLOYEES_BY_KEYWORD_SUCCESS = '[Employee] Fetch Employees By Keyword Success',
   FETCH_EMPLOYEES_BY_KEYWORD_FAILURE = '[Employee] Fetch Employees By Keyword Failure',
+  // For fetching employee by id
+  FETCH_EMPLOYEE_BY_ID_START = '[Employee] Fetch Employee By Id Start',
+  FETCH_EMPLOYEE_BY_ID_SUCCESS = '[Employee] Fetch Employee By Id Success',
+  FETCH_EMPLOYEE_BY_ID_FAILURE = '[Employee] Fetch Employee By Id Failure',
   // For newly hired employee
   FETCH_NEWEST_EMPLOYEE_START = '[Employee] Fetch Newest Employee Start',
   FETCH_NEWEST_EMPLOYEE_SUCCESS = '[Employee] Fetch Newest Employee Success',
@@ -47,6 +51,20 @@ const addNewEmployeeSuccess = createAction(
 
 const addNewEmployeeFailure = createAction(
   EmployeeActionType.ADD_NEW_EMPLOYEE_FAILURE
+);
+
+const fetchEmployeeByIdStart = createAction(
+  EmployeeActionType.FETCH_EMPLOYEE_BY_ID_START,
+  (id: string) => ({ payload: id })
+);
+
+const fetchEmployeeByIdSuccess = createAction(
+  EmployeeActionType.FETCH_EMPLOYEE_BY_ID_SUCCESS,
+  (employee: Employee) => ({ payload: employee })
+);
+
+const fetchEmployeeByIdFailure = createAction(
+  EmployeeActionType.FETCH_EMPLOYEE_BY_ID_FAILURE
 );
 
 const fetchAllEmployeesStart = createAction(
@@ -154,6 +172,9 @@ export {
   addNewEmployeeStart,
   addNewEmployeeSuccess,
   addNewEmployeeFailure,
+  fetchEmployeeByIdStart,
+  fetchEmployeeByIdSuccess,
+  fetchEmployeeByIdFailure,
   fetchAllEmployeesStart,
   fetchAllEmployeesSuccess,
   fetchAllEmployeesFailure,

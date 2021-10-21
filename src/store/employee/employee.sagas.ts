@@ -17,6 +17,8 @@ import { appendNotificationMessages } from 'store/core';
 import { DEBOUNCE_DURATION } from 'features/core/hooks';
 import {
   EmployeeActionType,
+  fetchEmployeeByIdSuccess,
+  fetchEmployeeByIdFailure,
   fetchAllEmployeesFailure,
   fetchAllEmployeesSuccess,
   fetchEmployeesByKeywordFailure,
@@ -37,6 +39,19 @@ const fetchPageEmployees = (payload: any, pageMode?: PageMode, docKey?: string) 
   const pageCursor: PageCursor = { pageMode, fieldKey, docKey: docKey || '' };
   return getPageEmployees(pageCursor, sortBy, isActive);
 };
+
+function* employeeByIdStartWorker(action: PayloadAction<string>): SagaIterator<void> {
+  try {
+    const employee = yield call(getEmployeeById, action.payload);
+    yield put(fetchEmployeeByIdSuccess(employee));
+  } catch (error: any) {
+    yield put(fetchEmployeeByIdFailure());
+    yield put(appendNotificationMessages({
+      status: error.name.toLowerCase(),
+      message: error.message
+    }));
+  }
+}
 
 function* refreshEmployeeWorker(action: PayloadAction<string>): SagaIterator<void> {
   try {
@@ -172,6 +187,13 @@ function* newestEmployeeStartWorker(): SagaIterator<void> {
   }
 }
 
+function* onFetchEmployeeByIdStart() {
+  yield takeLatest(
+    EmployeeActionType.FETCH_EMPLOYEE_BY_ID_START,
+    employeeByIdStartWorker
+  );
+}
+
 function* onFetchAllEmployeesStart() {
   yield takeLatest(
     EmployeeActionType.FETCH_ALL_EMPLOYEES_START,
@@ -223,6 +245,7 @@ function* onRefreshEmployeeStart() {
 
 export function* employeeSagas(): unknown {
   yield all([
+    call(onFetchEmployeeByIdStart),
     call(onFetchAllEmployeesStart),
     call(onFetchEmployeesByKeywordStart),
     call(onFetchInitialPageEmployeesStart),
