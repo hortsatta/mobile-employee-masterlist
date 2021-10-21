@@ -2,8 +2,9 @@ import { combineReducers } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistReducer } from 'redux-persist';
 
-import { authReducer } from '../auth/auth.reducer';
 import { coreReducer } from '../core/core.reducer';
+import { authReducer } from '../auth/auth.reducer';
+import { userReducer } from '../user/user.reducer';
 import { departmentReducer } from '../department/department.reducer';
 import { jobTitleReducer } from '../job-title/job-title.reducer';
 import { employeeReducer } from '../employee/employee.reducer';
@@ -16,6 +17,7 @@ const appPersistConfig = {
   blacklist: [
     'core',
     'auth',
+    'user',
     'department',
     'jobTitle',
     'employee'
@@ -26,6 +28,12 @@ const corePersistConfig = {
   key: 'core',
   storage: AsyncStorage,
   whitelist: ['darkMode']
+};
+
+const userPersistConfig = {
+  key: 'user',
+  storage: AsyncStorage,
+  whitelist: ['userRole.ids', 'userRole.entities']
 };
 
 const departmentPersistConfig = {
@@ -44,6 +52,7 @@ const jobTitlePersistConfig = {
 const appReducer = combineReducers({
   core: persistReducer(corePersistConfig, coreReducer),
   auth: authReducer,
+  user: persistReducer(userPersistConfig, userReducer),
   department: persistReducer(departmentPersistConfig, departmentReducer),
   jobTitle: persistReducer(jobTitlePersistConfig, jobTitleReducer),
   employee: employeeReducer
