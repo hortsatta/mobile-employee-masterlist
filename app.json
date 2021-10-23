@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "mobile-employee-masterlist",
+    "name": "An Employee Masterlist",
     "slug": "mobile-employee-masterlist",
-    "version": "0.9.5",
+    "version": "0.9.9",
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
     "splash": {
       "image": "./src/assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover",
+      "backgroundColor": "#1f4b99"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -22,8 +22,9 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+        "backgroundColor": "#1f4b99"
+      },
+      "package": "com.hortsatta.mobileemployeemasterlist"
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
