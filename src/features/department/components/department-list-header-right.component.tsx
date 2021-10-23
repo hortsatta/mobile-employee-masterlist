@@ -65,7 +65,7 @@ export const DepartmentListHeaderRight: FC<Props> = ({
                 <Text style={styles.cancelText(theme)}>Cancel</Text>
               </Button>
               <View>
-                <Icon name={IconName.GEM} size={ICON_SIZE} />
+                <Icon name={IconName.GEM} size={ICON_SIZE} color={theme.colors.text} />
                 <Badge style={styles.departmentCountBadge(theme)} size={18}>
                   {departmentIdCount}
                 </Badge>

@@ -15,25 +15,30 @@ const fontAssets = {
   Poppins_600SemiBold
 };
 
-const fontConfig: { [platform: string]: Fonts } = {
-  default: {
-    thin: {
-      fontFamily: 'Poppins_200ExtraLight',
-      fontWeight: 'normal'
-    },
-    light: {
-      fontFamily: 'Poppins_300Light',
-      fontWeight: 'normal'
-    },
-    regular: {
-      fontFamily: 'Poppins_400Regular',
-      fontWeight: 'normal'
-    },
-    medium: {
-      fontFamily: 'Poppins_500Medium',
-      fontWeight: 'normal'
-    }
+const fonts: Fonts = {
+  thin: {
+    fontFamily: 'Poppins_200ExtraLight',
+    fontWeight: 'normal'
+  },
+  light: {
+    fontFamily: 'Poppins_300Light',
+    fontWeight: 'normal'
+  },
+  regular: {
+    fontFamily: 'Poppins_400Regular',
+    fontWeight: 'normal'
+  },
+  medium: {
+    fontFamily: 'Poppins_500Medium',
+    fontWeight: 'normal'
   }
+};
+
+const fontConfig: { [platform: string]: Fonts } = {
+  web: { ...fonts },
+  ios: { ...fonts },
+  android: { ...fonts },
+  default: { ...fonts }
 };
 
 const fontSizes = {

@@ -2,9 +2,11 @@ import React, { FC, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import { useSelector } from 'react-redux';
 
 import { fontSizes, HEADER_HEIGHT, SUB_HEADER_HEIGHT } from 'config/core';
 import { PaperTheme } from 'models';
+import { selectDarkMode } from 'store/core';
 import { HeaderContext } from '../context';
 import { Text } from './text.component';
 
@@ -15,6 +17,7 @@ type Props = {
 export const SubHeader: FC<Props> = ({ options }) => {
   const theme = useTheme();
   const { headerY } = useContext(HeaderContext);
+  const darkMode = useSelector(selectDarkMode);
   const { title, headerRight } = options;
 
   const wrapperAnimatedStyle = useAnimatedStyle(() => ({
@@ -22,7 +25,7 @@ export const SubHeader: FC<Props> = ({ options }) => {
   }));
 
   return (
-    <Animated.View style={[styles.wrapper(theme), wrapperAnimatedStyle]}>
+    <Animated.View style={[styles.wrapper(darkMode, theme), wrapperAnimatedStyle]}>
       <Text style={styles.title}>{title}</Text>
       {headerRight && <View style={styles.right}>{headerRight()}</View>}
     </Animated.View>
@@ -30,7 +33,7 @@ export const SubHeader: FC<Props> = ({ options }) => {
 };
 
 const styles = StyleSheet.create<any>({
-  wrapper: ({ colors }: PaperTheme) => ({
+  wrapper: (isDark: boolean, { colors }: PaperTheme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -40,7 +43,7 @@ const styles = StyleSheet.create<any>({
     height: SUB_HEADER_HEIGHT,
     backgroundColor: colors.background,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0,0,0,0.05)'
+    borderBottomColor: isDark ? 'rgba(0,0,0,0.15)' : 'rgba(0,0,0,0.05)'
   }),
   title: {
     fontSize: fontSizes.sceneTitle,

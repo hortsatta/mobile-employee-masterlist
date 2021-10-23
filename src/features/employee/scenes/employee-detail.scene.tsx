@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/core';
 import { Route } from '@react-navigation/routers';
 import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Surface } from 'react-native-paper';
+import { Surface, useTheme } from 'react-native-paper';
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -67,6 +67,7 @@ export const EmployeeDetailScene: FC<Props> = ({ route }) => {
   const { id } = route.params as any;
   const { navigate, setOptions } = useNavigation<any>();
   const { canActivate } = useGuard();
+  const theme = useTheme();
   const darkMode = useSelector(selectDarkMode);
   const selectedEmployee = useSelector(selectSelectedEmployee);
   const loading = useSelector(selectEmployeeLoading);
@@ -80,14 +81,13 @@ export const EmployeeDetailScene: FC<Props> = ({ route }) => {
         <HeaderLeft
           {...props}
           isDark={darkMode}
-          onPress={() => props.onPress()}
+          onPress={() => {
+            dispatch(setSelectedEmployee());
+            props.onPress();
+          }}
         />
       )
     });
-
-    return () => {
-      dispatch(setSelectedEmployee());
-    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -169,7 +169,7 @@ export const EmployeeDetailScene: FC<Props> = ({ route }) => {
         }
 
       </View>
-      <StatusBar backgroundColor='transparent' style='dark' />
+      <StatusBar backgroundColor={theme.colors.background} style={darkMode ? 'light' : 'dark'} />
     </>
   );
 };
