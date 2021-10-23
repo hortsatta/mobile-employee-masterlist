@@ -97,6 +97,12 @@ const schema = z.object({
   isActive: z.boolean()
 });
 
+const fieldPageIndexList: any = {
+  1: ['department', 'jobTitle', 'hireDate', 'salary'],
+  2: ['firstName', 'lastName', 'middleInitial', 'gender', 'birthDate'],
+  3: ['currentAddress', 'homeAddress', 'phones', 'emails']
+};
+
 const pages = (isEditMode: boolean) => (isEditMode
   ? [UpsertEmployeePage1, UpsertEmployeePage2, UpsertEmployeePage3]
   : [UpsertEmployeePage0, UpsertEmployeePage1,
@@ -222,27 +228,41 @@ const UpsertEmployeeSceneComponent: FC = () => {
       return;
     }
 
-    handleSubmit(async (formData: EmployeeFormData) => {
-      // Dispatch start of adding new employee, add artificial delay (debounce),
-      // and go to last page of form,
-      dispatch(addNewEmployeeStart());
-      debounce(() => setIsCompleted(true));
-      pagerViewRef.current?.setPage(pageCount);
-      setCurrentPage(pageCount);
+    handleSubmit(
+      async (formData: EmployeeFormData) => {
+        // Dispatch start of adding new employee, add artificial delay (debounce),
+        // and go to last page of form,
+        dispatch(addNewEmployeeStart());
+        debounce(() => setIsCompleted(true));
+        pagerViewRef.current?.setPage(pageCount);
+        setCurrentPage(pageCount);
 
-      // Temporarily create new employee to be stored locally only.
-      // Don't add employee to firebase firestore (for now).
-      try {
-        const newEmployee = await createLocalEmployee(formData);
-        dispatch(addNewEmployeeSuccess(newEmployee));
-      } catch (error: any) {
-        dispatch(addNewEmployeeFailure());
-        dispatch(appendNotificationMessages({
-          status: error.name.toLowerCase(),
-          message: error.message
-        }));
+        // Temporarily create new employee to be stored locally only.
+        // Don't add employee to firebase firestore (for now).
+        try {
+          const newEmployee = await createLocalEmployee(formData);
+          dispatch(addNewEmployeeSuccess(newEmployee));
+        } catch (error: any) {
+          dispatch(addNewEmployeeFailure());
+          dispatch(appendNotificationMessages({
+            status: error.name.toLowerCase(),
+            message: error.message
+          }));
+        }
+      },
+      // Invalid form will locate and jump to page of fields with error.
+      async (errors) => {
+        const errorFieldName = Object.keys(errors)[0];
+        Object.keys(fieldPageIndexList).some(index => {
+          const page = parseInt(index, 10);
+          const exist = !!fieldPageIndexList[page]
+            .find((field: string) => field === errorFieldName);
+
+          if (exist) { pagerViewRef.current?.setPage(page); }
+          return exist;
+        });
       }
-    })();
+    )();
   };
 
   return (
