@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useColorScheme, LogBox } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -23,17 +23,22 @@ LogBox.ignoreLogs(['Setting a timer for a long period of time']);
 export const App: FC = () => {
   const dispatch = useDispatch();
   const [fontsLoaded] = useFonts(fontAssets);
+  const notificationMessages = useSelector(selectNotificationMessages);
+  const isUserSignedIn = useSelector(selectIsUserSignedIn);
+
   // Get system color scheme and redux "dark" variable
   // to set light or dark mode for app theme.
   const colorScheme = useColorScheme();
   const darkMode = useSelector(selectDarkMode);
+
   // Define final color mode for the app's theme;
   // Apply result to react-native-paper and react-navigation theme.
-  const isDark = (darkMode == null) ? colorScheme === 'dark' : darkMode;
-  const paperTheme = getPaperTheme(isDark);
-  const navTheme = getNavTheme(isDark);
-  const notificationMessages = useSelector(selectNotificationMessages);
-  const isUserSignedIn = useSelector(selectIsUserSignedIn);
+  const isDark = useMemo(() => (
+    (darkMode == null) ? colorScheme === 'dark' : darkMode
+  ), [darkMode, colorScheme]);
+
+  const paperTheme = useMemo(() => getPaperTheme(isDark), [isDark]);
+  const navTheme = useMemo(() => getNavTheme(isDark), [isDark]);
 
   useEffect(() => {
     dispatch(checkSignInSession());
