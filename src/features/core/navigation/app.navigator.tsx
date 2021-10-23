@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 
 import { appRoutes } from 'config/core';
 import { EmployeeTabNavigator, EmployeeStackNavigator } from 'features/employee/navigation';
@@ -14,7 +14,10 @@ const MainStack = createStackNavigator();
 export const AppNavigator: FC = () => (
   <AppStack.Navigator
     initialRouteName={appRoutes.home.path}
-    screenOptions={{ headerShown: false }}
+    screenOptions={{
+      headerShown: false,
+      ...TransitionPresets.SlideFromRightIOS
+    }}
   >
     <AppStack.Screen
       name={'mainNav'}
@@ -51,6 +54,9 @@ const MainNavigator: FC = () => (
       component={EmployeeTabNavigator}
       options={{ title: appRoutes.employee.name }}
     />
-    <MainStack.Screen name={appRoutes.menuNavigator.path} component={MenuNavigator} />
+    <MainStack.Screen
+      name={appRoutes.menuNavigator.path}
+      component={MenuNavigator}
+    />
   </MainStack.Navigator>
 );
