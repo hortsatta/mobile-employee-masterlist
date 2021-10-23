@@ -32,7 +32,7 @@ export const AuthScene: FC = () => {
   };
 
   return (
-    <StageView style={styles.screen}>
+    <StageView style={styles.screen} curtainAnimatedDisabled>
       <View style={styles.wrapper}>
         <Text style={styles.title}>Hello, Stranger</Text>
         <View style={styles.signInWrapper(theme)}>

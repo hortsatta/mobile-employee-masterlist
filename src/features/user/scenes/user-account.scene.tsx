@@ -73,7 +73,7 @@ export const UserAccountSceneComponent: FC = () => {
   };
 
   return (
-    <StageView style={styles.screen}>
+    <StageView style={styles.screen} curtainAnimatedDisabled>
       <View style={styles.wrapper}>
         <Text style={styles.title}>{isUserSignedIn && titleText}</Text>
         <View style={styles.contentWrapper(theme)}>

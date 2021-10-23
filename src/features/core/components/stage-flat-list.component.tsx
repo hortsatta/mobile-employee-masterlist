@@ -1,5 +1,5 @@
 import React, { ComponentProps, FC, ReactNode, useContext, useMemo } from 'react';
-import { FlatList as RNFlatList, StyleSheet, View } from 'react-native';
+import { FlatList as RNFlatList, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { KeyboardAwareFlatList } from 'react-native-keyboard-aware-scroll-view';
 import Animated from 'react-native-reanimated';
@@ -7,11 +7,13 @@ import Animated from 'react-native-reanimated';
 import { HEADER_HEIGHT, SUB_HEADER_HEIGHT } from 'config/core';
 import { PaperTheme } from 'models';
 import { HeaderContext } from '../context';
+import { useCurtain } from '../hooks';
 
 type Props = ComponentProps<typeof KeyboardAwareFlatList> & {
   floatingChildren?: ReactNode;
-  keyboardAware?: boolean,
-  withSubHeader?: boolean
+  keyboardAware?: boolean;
+  withSubHeader?: boolean;
+  curtainAnimatedDisabled?: boolean;
 }
 
 const AnimatedKeyboardAwareFlatList = Animated.createAnimatedComponent(KeyboardAwareFlatList);
@@ -22,11 +24,13 @@ export const StageFlatList: FC<Props> = ({
   floatingChildren,
   keyboardAware,
   withSubHeader,
+  curtainAnimatedDisabled,
   ...moreProps
 }) => {
 
   const theme = useTheme();
   const { onScroll } = useContext(HeaderContext);
+  const { curtainAnimatedStyle } = useCurtain();
 
   const topOffset = useMemo(
     () => withSubHeader ? HEADER_HEIGHT + SUB_HEADER_HEIGHT : HEADER_HEIGHT,
@@ -39,7 +43,10 @@ export const StageFlatList: FC<Props> = ({
   );
 
   return (
-    <View style={styles.wrapper(theme)}>
+    <Animated.View style={[
+      styles.wrapper(theme),
+      !curtainAnimatedDisabled && curtainAnimatedStyle
+    ]}>
       <FlatList
         contentContainerStyle={[
           styles.contentWrapper(topOffset),
@@ -51,7 +58,7 @@ export const StageFlatList: FC<Props> = ({
         {...moreProps}
       />
       {floatingChildren}
-    </View>
+    </Animated.View>
   );
 
 };

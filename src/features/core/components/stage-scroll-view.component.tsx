@@ -1,5 +1,5 @@
 import React, { ComponentProps, FC, ReactNode, useContext, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Animated from 'react-native-reanimated';
@@ -7,11 +7,13 @@ import Animated from 'react-native-reanimated';
 import { HEADER_HEIGHT, SUB_HEADER_HEIGHT } from 'config/core';
 import { PaperTheme } from 'models';
 import { HeaderContext } from '../context';
+import { useCurtain } from '../hooks';
 
 type Props = ComponentProps<typeof KeyboardAwareScrollView> & {
   floatingChildren?: ReactNode;
-  keyboardAware?: boolean,
-  withSubHeader?: boolean
+  keyboardAware?: boolean;
+  withSubHeader?: boolean;
+  curtainAnimatedDisabled?: boolean;
 }
 
 const AnimatedKeyboardAwareScrollView = Animated.createAnimatedComponent(KeyboardAwareScrollView);
@@ -21,12 +23,14 @@ export const StageScrollView: FC<Props> = ({
   floatingChildren,
   keyboardAware,
   withSubHeader,
+  curtainAnimatedDisabled,
   children,
   ...moreProps
 }) => {
 
   const theme = useTheme();
   const { onScroll } = useContext(HeaderContext);
+  const { curtainAnimatedStyle } = useCurtain();
 
   const topOffset = useMemo(
     () => withSubHeader ? HEADER_HEIGHT + SUB_HEADER_HEIGHT : HEADER_HEIGHT,
@@ -39,7 +43,10 @@ export const StageScrollView: FC<Props> = ({
   );
 
   return (
-    <View style={styles.wrapper(theme)}>
+    <Animated.View style={[
+      styles.wrapper(theme),
+      !curtainAnimatedDisabled && curtainAnimatedStyle
+    ]}>
       <ScrollView
         contentContainerStyle={[
           styles.contentWrapper(topOffset),
@@ -53,7 +60,7 @@ export const StageScrollView: FC<Props> = ({
         {children}
       </ScrollView>
       {floatingChildren}
-    </View>
+    </Animated.View>
   );
 
 };

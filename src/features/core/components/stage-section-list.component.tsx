@@ -1,5 +1,5 @@
 import React, { ComponentProps, FC, ReactNode, useContext, useMemo } from 'react';
-import { SectionList as RNSectionList, StyleSheet, View } from 'react-native';
+import { SectionList as RNSectionList, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { KeyboardAwareSectionList } from 'react-native-keyboard-aware-scroll-view';
 import Animated from 'react-native-reanimated';
@@ -7,6 +7,7 @@ import Animated from 'react-native-reanimated';
 import { HEADER_HEIGHT, SUB_HEADER_HEIGHT } from 'config/core';
 import { PaperTheme } from 'models';
 import { HeaderContext } from '../context';
+import { useCurtain } from '../hooks';
 
 type Props = Omit<
   ComponentProps<typeof KeyboardAwareSectionList>,
@@ -15,8 +16,9 @@ type Props = Omit<
   sections: any;
   renderItem?: any;
   floatingChildren?: ReactNode;
-  keyboardAware?: boolean,
-  withSubHeader?: boolean
+  keyboardAware?: boolean;
+  withSubHeader?: boolean;
+  curtainAnimatedDisabled?: boolean;
 }
 
 const AnimatedKeyboardAwareSectionList = Animated.createAnimatedComponent(KeyboardAwareSectionList);
@@ -27,12 +29,14 @@ export const StageSectionList: FC<Props> = ({
   floatingChildren,
   keyboardAware,
   withSubHeader,
+  curtainAnimatedDisabled,
   children,
   ...moreProps
 }) => {
 
   const theme = useTheme();
   const { onScroll } = useContext(HeaderContext);
+  const { curtainAnimatedStyle } = useCurtain();
 
   const topOffset = useMemo(
     () => withSubHeader ? HEADER_HEIGHT + SUB_HEADER_HEIGHT : HEADER_HEIGHT,
@@ -45,7 +49,10 @@ export const StageSectionList: FC<Props> = ({
   );
 
   return (
-    <View style={styles.wrapper(theme)}>
+    <Animated.View style={[
+      styles.wrapper(theme),
+      !curtainAnimatedDisabled && curtainAnimatedStyle
+    ]}>
       <SectionList
         contentContainerStyle={[
           styles.contentWrapper(topOffset),
@@ -59,7 +66,7 @@ export const StageSectionList: FC<Props> = ({
         {children}
       </SectionList>
       {floatingChildren}
-    </View>
+    </Animated.View>
   );
 
 };

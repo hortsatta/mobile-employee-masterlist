@@ -42,7 +42,7 @@ export const MainMenuScene: FC<StackScreenProps<any>> = () => {
   }, []);
 
   return (
-    <StageView>
+    <StageView curtainAnimatedDisabled>
       <View style={styles.wrapper}>
         <View style={styles.buttonsWrapper}>
           <MenuButton
