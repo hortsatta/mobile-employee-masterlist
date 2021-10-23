@@ -87,7 +87,7 @@ export const EmployeeTabNavigator: FC = () => {
             <TabVSvg
               width={41}
               height={57}
-              fill={darkMode ? theme.colors.secondaryBackground : theme.colors.background}
+              fill={darkMode ? theme.colors.backgroundSecondary : theme.colors.background}
             />
             <View style={styles.wall(darkMode, theme)} />
           </View>
@@ -145,7 +145,7 @@ const styles = StyleSheet.create<any>({
   wall: (isDark: boolean, { colors }: PaperTheme) => ({
     width: '100%',
     height: 56,
-    backgroundColor: isDark ? colors.secondaryBackground : colors.background,
+    backgroundColor: isDark ? colors.backgroundSecondary : colors.background,
     borderTopWidth: 1,
     borderTopColor: 'rgba(0,0,0,0.05)'
   }),

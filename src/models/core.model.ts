@@ -19,9 +19,9 @@ type PaperTheme = Omit<Theme, 'colors'> & {
   colors: {
     primary: string;
     background: string;
+    backgroundSecondary: string;
     border: string;
     secondary: string;
-    secondaryBackground: string;
     surface: string;
     accent: string;
     index: string;
