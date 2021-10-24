@@ -72,14 +72,17 @@ export class EmployeePersonalInfo implements PersonalInfo {
     public emails: string[],
     public picture: string | null,
     public pictureThumb?: string | null,
-    public pictureFull?: string | null
+    public pictureFull?: string | null,
+    private isLocal?: boolean
   ) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.middleInitial = middleInitial;
     this.gender = gender;
     this.birthDate = {
-      date: dayjs(getDateFromTimestamp(birthDate.date as any)).format('MMMM DD, YYYY'),
+      date: isLocal
+        ? birthDate.date
+        : dayjs(getDateFromTimestamp(birthDate.date as any)).format('MMMM DD, YYYY'),
       shortDate: birthDate.shortDate
     };
     this.currentAddress = currentAddress;

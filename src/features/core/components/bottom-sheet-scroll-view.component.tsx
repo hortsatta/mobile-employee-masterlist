@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { useSelector } from 'react-redux';
 import React, { FC, useMemo, ComponentProps, useRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import { Portal, useTheme } from 'react-native-paper';
 import Animated from 'react-native-reanimated';
@@ -14,10 +14,12 @@ import { darkColors } from 'config/core';
 import { PaperTheme } from 'models';
 import { selectDarkMode } from 'store/core';
 
+type BottomSheetScrollViewProps = Omit<ComponentProps<typeof BSScrollView>, 'children'>;
+
 type Props = Omit<BottomSheetProps, 'snapPoints'> & {
   show: boolean;
   snapPoints?: Array<string | number> | Animated.SharedValue<Array<string | number>>;
-  scrollViewProps?: ComponentProps<typeof BSScrollView>
+  scrollViewProps?: BottomSheetScrollViewProps;
 }
 
 export const BottomSheetScrollView: FC<Props> = ({
@@ -67,7 +69,7 @@ export const BottomSheetScrollView: FC<Props> = ({
         </BottomSheet>
       </Portal>
       {show && <StatusBar
-        backgroundColor={darkMode ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.5)'}
+        backgroundColor={darkMode ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.5)'}
         style={darkMode ? 'light' : 'dark'}
       />}
     </>

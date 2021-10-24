@@ -110,6 +110,9 @@ export const EmployeeDetailScene: FC<Props> = ({ route }) => {
   }, [selectedEmployee]);
 
   useEffect(() => {
+    // TEMPO
+    if (id.includes('local')) { return; }
+
     if (!selectedEmployee) { return; }
     dispatch(refreshEmployeeStart(id));
   }, [dispatch, id, selectedEmployee]);

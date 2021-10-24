@@ -1,9 +1,11 @@
 import React, { ComponentProps, FC, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import dayjs from 'dayjs';
 
 import { isPlatformIOS } from 'helpers';
+import { selectDarkMode } from 'store/core';
 import { TextInput } from './text-input.component';
 
 type Props = ComponentProps<typeof TextInput> & {
@@ -21,6 +23,7 @@ export const DateTimePicker: FC<Props> = ({
   ...moreProps
 }) => {
 
+  const darkMode = useSelector(selectDarkMode);
   const ref = useRef<any>(null);
   const [show, setShow] = useState(false);
 
@@ -48,6 +51,7 @@ export const DateTimePicker: FC<Props> = ({
       />
       {show && (
         <RNDateTimePicker
+          themeVariant={darkMode ? 'dark' : 'light'}
           value={value}
           mode={mode || 'date'}
           display='default'
