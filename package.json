@@ -35,7 +35,7 @@
     "react-hook-form": "^7.16.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
     "react-native-dotenv": "^3.2.0",
-    "react-native-gesture-handler": "^1.10.3",
+    "react-native-gesture-handler": "~1.10.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.4",
     "react-native-pager-view": "5.0.12",
     "react-native-paper": "^4.9.2",
@@ -51,7 +51,10 @@
     "reselect": "^4.0.0",
     "rn-material-ui-textfield": "^1.0.5",
     "rn-placeholder": "^3.0.3",
-    "zod": "^3.9.1"
+    "zod": "^3.9.1",
+    "expo-camera": "~11.2.2",
+    "expo-image-picker": "~10.2.2",
+    "expo-image-manipulator": "~9.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
