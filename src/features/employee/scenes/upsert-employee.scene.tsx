@@ -1,11 +1,4 @@
-import React, {
-  FC,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/core';
 import { Keyboard, StyleSheet } from 'react-native';
@@ -37,13 +30,7 @@ import {
   StageView,
   withHeaderResetter
 } from 'features/core/components';
-import {
-  UpsertEmployeePage0,
-  UpsertEmployeePage1,
-  UpsertEmployeePage2,
-  UpsertEmployeePage3,
-  UpsertEmployeePage4
-} from '../components';
+import { getEmployeePageCount, UpsertEmployeePages } from '../components';
 
 type EmployeeFormData =
   Omit<Employee, 'id' | 'hireDate' | 'department' | 'jobTitle' | 'salary' | 'personalInfo'>
@@ -60,23 +47,44 @@ type EmployeeFormData =
     picture?: string;
   }
 
+// const defaultValues: EmployeeFormData = {
+//   hireDate: dayjs().toDate(),
+//   department: '',
+//   jobTitle: '',
+//   // Personal info
+//   firstName: '',
+//   lastName: '',
+//   middleInitial: '',
+//   gender: Gender.FEMALE,
+//   birthDate: dayjs(`${dayjs().year()}-01-01`)
+//     .subtract(18, 'year')
+//     .toDate(),
+//   currentAddress: '',
+//   homeAddress: '',
+//   phones: [],
+//   emails: [],
+//   picture: '',
+//   isActive: true
+// };
+
 const defaultValues: EmployeeFormData = {
   hireDate: dayjs().toDate(),
-  department: '',
-  jobTitle: '',
+  department: '96AXvOeRZXkEoDCbuhWq',
+  jobTitle: '1ipOZbKnyRjYMIDQNwjS',
   // Personal info
-  firstName: '',
-  lastName: '',
-  middleInitial: '',
+  firstName: 'Erin',
+  lastName: 'Nire',
+  middleInitial: 'A',
   gender: Gender.FEMALE,
   birthDate: dayjs(`${dayjs().year()}-01-01`)
     .subtract(18, 'year')
     .toDate(),
-  currentAddress: '',
-  homeAddress: '',
-  phones: [],
-  emails: [],
+  currentAddress: 'Iloilo City',
+  homeAddress: 'Not Iloilo City',
+  phones: [{ value: '09219490071' }],
+  emails: [{ value: 'erin_nire@gmail.com' }],
   picture: '',
+  salary: 11,
   isActive: true
 };
 
@@ -94,6 +102,7 @@ const schema = z.object({
   homeAddress: z.string().min(1),
   phones: z.array(z.object({ value: z.string().min(1) })).nonempty(),
   emails: z.array(z.object({ value: z.string().email() })).nonempty(),
+  picture: z.string().optional(),
   isActive: z.boolean()
 });
 
@@ -102,12 +111,6 @@ const fieldPageIndexList: any = {
   2: ['firstName', 'lastName', 'middleInitial', 'gender', 'birthDate'],
   3: ['currentAddress', 'homeAddress', 'phones', 'emails']
 };
-
-const pages = (isEditMode: boolean) => (isEditMode
-  ? [UpsertEmployeePage1, UpsertEmployeePage2, UpsertEmployeePage3]
-  : [UpsertEmployeePage0, UpsertEmployeePage1,
-    UpsertEmployeePage2, UpsertEmployeePage3]
-);
 
 const UpsertEmployeeSceneComponent: FC = () => {
   const dispatch = useDispatch();
@@ -128,7 +131,7 @@ const UpsertEmployeeSceneComponent: FC = () => {
   const [isCompleted, setIsCompleted] = useState(false);
 
   const pageCount = useMemo(() => (
-    pages(!!selectedEmployee).length
+    getEmployeePageCount(!!selectedEmployee)
   ), [selectedEmployee]);
 
   useEffect(() => {
@@ -164,11 +167,13 @@ const UpsertEmployeeSceneComponent: FC = () => {
     if (!selectedEmployee) { return; }
     setOptions({ title: 'Update Employee' });
     loadEmployeeToUpdate();
+    setIsLastPage(true);
+    pagerViewRef.current?.setPage(0);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedEmployee]);
 
   useEffect(() => {
-    if (isLastPage || (currentPage < pageCount)) { return; }
+    if (isLastPage || (currentPage < pageCount - 1)) { return; }
     setIsLastPage(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
@@ -190,7 +195,7 @@ const UpsertEmployeeSceneComponent: FC = () => {
       salary,
       isActive,
       personalInfo
-    }: any = selectedEmployee;
+    }: any = selectedEmployee; console.log(selectedEmployee);
 
     const existingEmployee: EmployeeFormData = {
       id,
@@ -207,11 +212,10 @@ const UpsertEmployeeSceneComponent: FC = () => {
       homeAddress: personalInfo.homeAddress,
       phones: personalInfo.phones.map((phone: string) => ({ value: phone })),
       emails: personalInfo.emails.map((email: string) => ({ value: email })),
-      // picture: '',
+      picture: personalInfo.pictureFull || personalInfo.pictureThumb,
       isActive
     };
 
-    setIsLastPage(true);
     reset(existingEmployee);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedEmployee]);
@@ -230,16 +234,17 @@ const UpsertEmployeeSceneComponent: FC = () => {
 
     handleSubmit(
       async (formData: EmployeeFormData) => {
-        // Dispatch start of adding new employee, add artificial delay (debounce),
-        // and go to last page of form,
-        dispatch(addNewEmployeeStart());
+        // Add artificial delay (debounce), and go
+        // to last page of form,
         debounce(() => setIsCompleted(true));
         pagerViewRef.current?.setPage(pageCount);
         setCurrentPage(pageCount);
-
+        // Dispatch start of adding new employee
         // Temporarily create new employee to be stored locally only.
         // Don't add employee to firebase firestore (for now).
         try {
+          if (selectedEmployee) { return; }
+          dispatch(addNewEmployeeStart());
           const newEmployee = await createLocalEmployee(formData);
           dispatch(addNewEmployeeSuccess(newEmployee));
         } catch (error: any) {
@@ -271,7 +276,7 @@ const UpsertEmployeeSceneComponent: FC = () => {
         <PagerViewNavigation
           style={styles.pagerViewNav}
           currentPage={currentPage}
-          pageCount={pageCount + 1}
+          pageCount={pageCount}
         />
         <PagerView
           ref={pagerViewRef}
@@ -280,12 +285,10 @@ const UpsertEmployeeSceneComponent: FC = () => {
           initialPage={0}
           onPageSelected={handlePageSelected}
         >
-          {pages(!!selectedEmployee).map((Page, index) => (
-            <Page key={index.toString()} />
-          ))}
-          <UpsertEmployeePage4
+          <UpsertEmployeePages
             isUpdate={!!selectedEmployee}
             isCompleted={isCompleted}
+            onSkipPage={() => pagerViewRef.current?.setPage(currentPage + 1)}
           />
         </PagerView>
         {!isKeyboardVisible && <FabButton
