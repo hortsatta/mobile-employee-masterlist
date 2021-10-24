@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import dayjs from 'dayjs';
+import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 
 import {
   storage,
@@ -282,8 +283,8 @@ const createLocalEmployee = async (formData: EmployeeFormData): Promise<Employee
     currentAddress,
     homeAddress,
     phones,
-    emails
-    // picture
+    emails,
+    picture
   } = formData;
 
   const employeeId = await createId();
@@ -306,27 +307,38 @@ const createLocalEmployee = async (formData: EmployeeFormData): Promise<Employee
     dateFrom: hireDate.toISOString()
   };
 
+  const pictures = picture
+    ? await generateEmployeePortait(picture)
+    : {
+      picture: null,
+      pictureFull: null,
+      pictureThumb: null
+    };
+
   const personalInfo: PersonalInfo = new EmployeePersonalInfo(
     firstName,
     lastName,
     middleInitial,
     gender,
     {
-      date: birthDate.toISOString(),
+      date: dayjs(birthDate).format('MMMM DD, YYYY'),
       shortDate: dayjs(birthDate).format('MM-DD')
     },
     currentAddress,
     homeAddress,
     phones.map(phone => phone.value),
     emails.map(phone => phone.value),
-    null
+    pictures.picture,
+    pictures.pictureThumb,
+    pictures.pictureFull,
+    true
   );
 
   const employee: Employee = {
     isActive,
-    id: employeeId,
+    id: `${employeeId}-local`,
     hireDate: {
-      date: hireDate.toISOString(),
+      date: dayjs(hireDate).format('MMMM DD, YYYY'),
       shortDate: dayjs(hireDate).format('MM-DD')
     },
     department,
@@ -340,6 +352,24 @@ const createLocalEmployee = async (formData: EmployeeFormData): Promise<Employee
   };
 
   return employee;
+};
+
+const generateEmployeePortait = async (uri: string) => {
+  const FULL_SIZE = 600;
+  const THUMB_SIZE = 300;
+
+  const fullSize = { width: FULL_SIZE, height: FULL_SIZE };
+  const thumbSize = { width: THUMB_SIZE, height: THUMB_SIZE };
+  const saveOptions = { compress: 1, format: SaveFormat.JPEG };
+
+  const imageFull = await manipulateAsync(uri, [{ resize: fullSize }], saveOptions);
+  const imageThumb = await manipulateAsync(uri, [{ resize: thumbSize }], saveOptions);
+
+  return {
+    picture: imageFull.uri,
+    pictureFull: imageFull.uri,
+    pictureThumb: imageThumb.uri
+  };
 };
 
 export {
