@@ -3,6 +3,8 @@ import { lightColors } from 'config/core';
 
 import ArrowListAscendingSvg from 'assets/svgs/arrow-up-short-wide.svg';
 import ArrowListDescendingSvg from 'assets/svgs/arrow-down-wide-short.svg';
+import CameraSvg from 'assets/svgs/camera.svg';
+import CameraSlashSvg from 'assets/svgs/camera-slash.svg';
 import CaretDownSvg from 'assets/svgs/caret-down.svg';
 import CaretUpSvg from 'assets/svgs/caret-up.svg';
 import CircleXmarkSvg from 'assets/svgs/circle-xmark.svg';
@@ -17,12 +19,15 @@ import FloppyDiskSvg from 'assets/svgs/floppy-disk.svg';
 import FloppyDiskArrowRightSvg from 'assets/svgs/floppy-disk-circle-arrow-right.svg';
 import GemSvg from 'assets/svgs/gem.svg';
 import GithubSvg from 'assets/svgs/github.svg';
+import ImageSvg from 'assets/svgs/image.svg';
+import ImageSlashSvg from 'assets/svgs/image-slash.svg';
 import KeySvg from 'assets/svgs/key.svg';
 import LeftSvg from 'assets/svgs/left.svg';
 import MagnifyingGlassSvg from 'assets/svgs/magnifying-glass.svg';
 import MaleSvg from 'assets/svgs/mars.svg';
 import PenSwirlSvg from 'assets/svgs/pen-swirl.svg';
 import PlusSvg from 'assets/svgs/plus.svg';
+import RotateSvg from 'assets/svgs/rotate.svg';
 import SquareCheckSvg from 'assets/svgs/square-check.svg';
 import SquarePlusSvg from 'assets/svgs/square-plus.svg';
 import UserTieSvg from 'assets/svgs/user-tie.svg';
@@ -31,6 +36,8 @@ import XmarkSvg from 'assets/svgs/xmark.svg';
 export enum IconName {
   ARROW_LIST_ASCENDING = 'arrow_list_ascending',
   ARROW_LIST_DESCENDING = 'arrow_list_descending',
+  CAMERA = 'camera',
+  CAMERA_SLASH = 'camera_slash',
   CARET_DOWN = 'caret_down',
   CARET_UP = 'caret_up',
   CIRCLE_XMARK = 'circle_xmark',
@@ -45,13 +52,15 @@ export enum IconName {
   FLOPPY_DISK_ARROW_RIGHT = 'floppy_disk_arrow_right',
   GEM = 'gem',
   GITHUB = 'github',
-  HEAD_SIDE = 'head_side',
+  IMAGE = 'image',
+  IMAGE_SLASH = 'image_slash',
   KEY = 'key',
   LEFT = 'left',
   MAGNIFYING_GLASS = 'magnifying_glass',
   MALE = 'male',
   PEN_SWIRL = 'pen_swirl',
   PLUS = 'plus',
+  ROTATE = 'rotate',
   SQUARE_CHECK = 'square_check',
   SQUARE_PLUS = 'square_plus',
   USER_TIE = 'user_tie',
@@ -64,6 +73,10 @@ const getSvg = (name: IconName | string) => {
       return ArrowListAscendingSvg;
     case IconName.ARROW_LIST_DESCENDING:
       return ArrowListDescendingSvg;
+    case IconName.CAMERA:
+      return CameraSvg;
+    case IconName.CAMERA_SLASH:
+      return CameraSlashSvg;
     case IconName.CARET_DOWN:
       return CaretDownSvg;
     case IconName.CARET_UP:
@@ -92,6 +105,10 @@ const getSvg = (name: IconName | string) => {
       return GemSvg;
     case IconName.GITHUB:
       return GithubSvg;
+    case IconName.IMAGE:
+      return ImageSvg;
+    case IconName.IMAGE_SLASH:
+      return ImageSlashSvg;
     case IconName.KEY:
       return KeySvg;
     case IconName.LEFT:
@@ -104,6 +121,8 @@ const getSvg = (name: IconName | string) => {
       return PenSwirlSvg;
     case IconName.PLUS:
       return PlusSvg;
+    case IconName.ROTATE:
+      return RotateSvg;
     case IconName.SQUARE_CHECK:
       return SquareCheckSvg;
     case IconName.SQUARE_PLUS:
