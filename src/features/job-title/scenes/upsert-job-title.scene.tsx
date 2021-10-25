@@ -5,9 +5,7 @@ import { StageView, withHeaderResetter } from 'features/core/components';
 
 const UpsertJobTitleSceneComponent: FC = () => {
   return (
-    <StageView style={styles.wrapper} withSubHeader>
-      
-    </StageView>
+    <StageView style={styles.wrapper} withSubHeader />
   );
 };
 
