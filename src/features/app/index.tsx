@@ -1,11 +1,15 @@
 import React, { FC } from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
+import { LogBox } from 'react-native';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { persistor, store } from 'store';
 import { HeaderContextProvider } from 'features/core/context';
 import { App } from './app';
+
+// TEMPO
+LogBox.ignoreLogs(['Setting a timer for a long period of time']);
 
 export const Root: FC = () => (
   <ReduxProvider store={store}>
