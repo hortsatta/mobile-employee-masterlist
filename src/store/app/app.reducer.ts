@@ -1,6 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistReducer } from 'redux-persist';
+import MMKVStorage from 'react-native-mmkv-storage';
 
 import { coreReducer } from '../core/core.reducer';
 import { authReducer } from '../auth/auth.reducer';
@@ -9,11 +9,13 @@ import { departmentReducer } from '../department/department.reducer';
 import { jobTitleReducer } from '../job-title/job-title.reducer';
 import { employeeReducer } from '../employee/employee.reducer';
 
+const storage = new MMKVStorage.Loader().initialize();
+
 // Configure redux-persist to keep store data in storage,
 // specific config if you want to blacklist specific property.
 const appPersistConfig = {
   key: 'root',
-  storage: AsyncStorage,
+  storage,
   blacklist: [
     'core',
     'auth',
@@ -26,25 +28,25 @@ const appPersistConfig = {
 
 const corePersistConfig = {
   key: 'core',
-  storage: AsyncStorage,
+  storage,
   whitelist: ['darkMode']
 };
 
 const userPersistConfig = {
   key: 'user',
-  storage: AsyncStorage,
+  storage,
   whitelist: ['userRole.ids', 'userRole.entities']
 };
 
 const departmentPersistConfig = {
   key: 'department',
-  storage: AsyncStorage,
+  storage,
   whitelist: ['ids', 'entities']
 };
 
 const jobTitlePersistConfig = {
   key: 'jobTitle',
-  storage: AsyncStorage,
+  storage,
   whitelist: ['ids', 'entities']
 };
 

@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { FC, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useColorScheme, LogBox } from 'react-native';
+import { useColorScheme } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { useFonts } from '@expo-google-fonts/poppins';
@@ -13,12 +13,9 @@ import { fetchAllUserRolesStart } from 'store/user';
 import { fetchAllDepartmentsStart } from 'store/department';
 import { fetchAllJobTitlesStart } from 'store/job-title';
 import { checkSignInSession, selectIsUserSignedIn } from 'store/auth';
-import { AppNavigator } from '../navigation';
-import { Icon } from './icon.component';
-import { NotificationManager } from './notification-manager.component';
-
-// TEMPO
-LogBox.ignoreLogs(['Setting a timer for a long period of time']);
+import { AppNavigator } from '../core/navigation';
+import { Icon } from '../core/components/icon.component';
+import { NotificationManager } from '../core/components/notification-manager.component';
 
 export const App: FC = () => {
   const dispatch = useDispatch();
