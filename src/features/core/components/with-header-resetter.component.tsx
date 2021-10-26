@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import { FC, useContext } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { HeaderContext } from '../context';
 

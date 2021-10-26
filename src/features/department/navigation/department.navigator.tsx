@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { appRoutes } from 'config/core';

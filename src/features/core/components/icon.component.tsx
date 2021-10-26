@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { lightColors } from 'config/core';
 
 import ArrowListAscendingSvg from 'assets/svgs/arrow-up-short-wide.svg';

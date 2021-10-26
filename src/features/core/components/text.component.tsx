@@ -1,4 +1,4 @@
-import React, { ComponentProps, FC } from 'react';
+import { ComponentProps, FC } from 'react';
 import { StyleSheet } from 'react-native';
 import { Text as PaperText } from 'react-native-paper';
 

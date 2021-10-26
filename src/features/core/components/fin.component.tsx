@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { StyleSheet, TextStyle } from 'react-native';
 import { Text } from './text.component';
 

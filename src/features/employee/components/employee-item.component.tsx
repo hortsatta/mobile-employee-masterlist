@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { ActivityIndicator, useTheme } from 'react-native-paper';

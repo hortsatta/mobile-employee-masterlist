@@ -1,4 +1,4 @@
-import React, { ComponentProps, FC, useMemo } from 'react';
+import { ComponentProps, FC, useMemo } from 'react';
 import { RefreshControl as RNRefreshControl } from 'react-native';
 import { useTheme } from 'react-native-paper';
 

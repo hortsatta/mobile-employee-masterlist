@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { StyleSheet, useWindowDimensions } from 'react-native';
 
 import { Text } from 'features/core/components';

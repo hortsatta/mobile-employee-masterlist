@@ -1,4 +1,4 @@
-import React, { ComponentProps, FC, useEffect, useState } from 'react';
+import { ComponentProps, FC, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Snackbar } from 'react-native-paper';
 

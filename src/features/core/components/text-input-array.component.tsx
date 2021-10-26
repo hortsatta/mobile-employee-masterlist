@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { Control, Controller, UseFieldArrayReturn } from 'react-hook-form';
 import { KeyboardTypeOptions, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { IconButton, useTheme } from 'react-native-paper';

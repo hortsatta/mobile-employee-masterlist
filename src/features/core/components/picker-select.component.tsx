@@ -1,4 +1,4 @@
-import React, { ComponentProps, FC } from 'react';
+import { ComponentProps, FC } from 'react';
 import { useSelector } from 'react-redux';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { IconButton, useTheme } from 'react-native-paper';

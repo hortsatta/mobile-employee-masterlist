@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
 import { Surface, useTheme } from 'react-native-paper';

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Divider } from 'react-native-paper';

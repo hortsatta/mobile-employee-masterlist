@@ -1,4 +1,4 @@
-import React, { ComponentProps, FC, useState } from 'react';
+import { ComponentProps, FC, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Divider, IconButton } from 'react-native-paper';
 import { Controller, useForm } from 'react-hook-form';

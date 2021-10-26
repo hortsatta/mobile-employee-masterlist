@@ -1,4 +1,4 @@
-import React, { ComponentProps, FC, ReactNode, useContext, useMemo } from 'react';
+import { ComponentProps, FC, ReactNode, useContext, useMemo } from 'react';
 import { SectionList as RNSectionList, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { KeyboardAwareSectionList } from 'react-native-keyboard-aware-scroll-view';

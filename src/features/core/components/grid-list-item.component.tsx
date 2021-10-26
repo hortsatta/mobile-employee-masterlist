@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Animated,{

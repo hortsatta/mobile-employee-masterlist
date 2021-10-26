@@ -1,4 +1,4 @@
-import React, { ComponentProps, FC, useRef, useState } from 'react';
+import { ComponentProps, FC, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
 import RNDateTimePicker from '@react-native-community/datetimepicker';

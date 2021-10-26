@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { StyleSheet, TextStyle, View } from 'react-native';
 import { Divider } from 'react-native-paper';
 

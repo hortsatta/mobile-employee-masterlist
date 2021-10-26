@@ -1,4 +1,4 @@
-import React, { FC, createContext } from 'react';
+import { FC, createContext } from 'react';
 import {
   cancelAnimation,
   useAnimatedScrollHandler,

@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { FC, useMemo, ComponentProps, useRef, useEffect } from 'react';
+import { FC, useMemo, ComponentProps, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import { Portal, useTheme } from 'react-native-paper';

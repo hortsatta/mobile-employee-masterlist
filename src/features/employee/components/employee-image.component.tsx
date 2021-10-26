@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Image, ImageStyle, Pressable, StyleSheet } from 'react-native';
 import { Gender } from 'models';
 import Animated  from 'react-native-reanimated';

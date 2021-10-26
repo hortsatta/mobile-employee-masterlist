@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';

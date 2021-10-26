@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StackActions, useNavigation } from '@react-navigation/core';
 import { StackScreenProps } from '@react-navigation/stack';

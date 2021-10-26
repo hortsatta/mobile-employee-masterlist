@@ -1,4 +1,4 @@
-import React, { ComponentProps, FC } from 'react';
+import { ComponentProps, FC } from 'react';
 import { IconButton, Menu } from 'react-native-paper';
 import { IconName } from './icon.component';
 
