@@ -1,8 +1,9 @@
 import React, { FC, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Image, Pressable, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
-import { IconButton, Portal, useTheme } from 'react-native-paper';
+import { IconButton, Portal } from 'react-native-paper';
 
-import { PaperTheme } from 'models';
+import { selectDarkMode } from 'store/core';
 import {
   CameraImagePicker,
   GalleryImagePicker,
@@ -23,7 +24,7 @@ enum PickerMode {
 }
 
 export const EmployeePhotoPicker: FC<Props> = ({ style, value, onImageChange }) => {
-  const theme = useTheme();
+  const darkMode = useSelector(selectDarkMode);
   const [pickerMode, setPickerMode] = useState<PickerMode | null>(null);
   const [showRemoveButton, setShowRemoveButton] = useState(false);
 
@@ -41,7 +42,7 @@ export const EmployeePhotoPicker: FC<Props> = ({ style, value, onImageChange }) 
   return (
     <>
       <View style={style} collapsable={false}>
-        <View style={styles.imageWrapper(value)}>
+        <View style={styles.imageWrapper(darkMode, value)}>
           {
             value
               ? (
@@ -72,14 +73,14 @@ export const EmployeePhotoPicker: FC<Props> = ({ style, value, onImageChange }) 
                       size={36}
                       onPress={() => setPickerMode(PickerMode.CAMERA)}
                     />
-                    <View style={styles.verticalDivider} />
+                    <View style={styles.verticalDivider(darkMode)} />
                     <IconButton
                       icon={IconName.IMAGE}
                       size={36}
                       onPress={() => setPickerMode(PickerMode.GALLERY)}
                     />
                   </View>
-                  <Text style={styles.imageText(theme)}>
+                  <Text style={styles.imageText}>
                     Take a photo or use an existing image for the employee&apos;s portrait picture.
                   </Text>
                 </>
@@ -100,21 +101,20 @@ export const EmployeePhotoPicker: FC<Props> = ({ style, value, onImageChange }) 
 };
 
 const styles = StyleSheet.create<any>({
-  verticalDivider: {
+  verticalDivider: (isDark: boolean) => ({
     marginTop: 8,
     width: 1,
     height: '100%',
-    backgroundColor: '#fff',
-    opacity: 0.1
-  },
-  imageWrapper: (hasImage: boolean) => ({
+    backgroundColor: isDark ? '#fff' : '#000',
+    opacity: 0.2
+  }),
+  imageWrapper: (isDark: boolean, hasImage: boolean) => ({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    width: 250,
-    height: 250,
-    backgroundColor: 'rgba(0,0,0,0.25)',
-    borderRadius: 16,
+    width: '100%',
+    height: '100%',
+    backgroundColor: isDark ? 'rgba(0,0,0,0.25)' : 'rgba(0,0,0,0.2)',
     overflow: 'hidden',
     ...hasImage && shadowElevations[2]
   }),
@@ -125,12 +125,12 @@ const styles = StyleSheet.create<any>({
     justifyContent: 'space-evenly',
     alignItems: 'center'
   },
-  imageText: ({ colors }: PaperTheme) => ({
+  imageText: {
     paddingHorizontal: 36,
-    color: colors.placeholder,
     textAlign: 'center',
-    fontSize: 10
-  }),
+    fontSize: 10,
+    opacity: 0.7
+  },
   iconButton: {
     alignItems: 'center'
   },

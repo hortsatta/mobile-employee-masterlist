@@ -1,12 +1,11 @@
 import React, { ComponentProps, FC } from 'react';
 import { useSelector } from 'react-redux';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
-import { IconButton, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 
 import { PaperTheme } from 'models';
 import { selectDarkMode } from 'store/core';
-import { IconName } from './icon.component';
 
 type Props = ComponentProps<typeof RNPickerSelect> & {
   containerStyle?: StyleProp<ViewStyle>;
@@ -20,9 +19,6 @@ export const PickerSelect: FC<Props> = ({ style, containerStyle, error, ...moreP
   return (
     <View style={[styles.wrapper(darkMode, theme), containerStyle, error && styles.error(theme)]}>
       <RNPickerSelect
-        Icon={(props: any) => (
-          <IconButton {...props} style={styles.icon} icon={IconName.CARET_DOWN} />
-        )}
         style={{
           viewContainer: styles.viewWrapper,
           placeholder: styles.placeholder(error, theme),
@@ -45,15 +41,17 @@ const styles = StyleSheet.create<any>({
     borderColor: isDark ? 'rgba(255,255,255,0.33)' : 'rgba(0,0,0,0.2)'
   }),
   viewWrapper: {
-    paddingVertical: 12,
     paddingLeft: 4,
-    height: 50
+    height: 50,
+    overflow: 'hidden'
   },
   placeholder: (error: boolean, { colors }: PaperTheme) => ({
     color: error ? colors.error : colors.placeholder
   }),
   input: ({ colors }: PaperTheme) =>  ({
+    top: -3,
     color: colors.text
+
   }),
   error: ({ colors }: PaperTheme) =>  ({
     borderBottomWidth: 2,

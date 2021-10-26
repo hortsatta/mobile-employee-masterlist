@@ -15,6 +15,7 @@ export const UpsertEmployeeOptional: FC = () => {
         control={control}
         render={({ field: { value, onChange } }) => (
           <EmployeePhotoPicker
+            style={styles.photoPicker}
             value={value}
             onImageChange={image => onChange(image?.uri)}
           />
@@ -34,5 +35,12 @@ const styles = StyleSheet.create({
     fontSize: 10,
     textAlign: 'center',
     opacity: 0.4
+  },
+  photoPicker: {
+    alignSelf: 'center',
+    width: 250,
+    height: 250,
+    borderRadius: 16,
+    overflow: 'hidden'
   }
 });
