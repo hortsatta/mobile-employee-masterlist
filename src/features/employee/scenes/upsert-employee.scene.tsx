@@ -2,11 +2,12 @@ import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 're
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/core';
 import { Keyboard, StyleSheet } from 'react-native';
-import PagerView, { ViewPagerOnPageSelectedEvent } from 'react-native-pager-view';
+import PagerView, { PagerViewOnPageSelectedEvent } from 'react-native-pager-view';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import { appRoutes } from 'config/core';
 import { isPlatformIOS } from 'helpers';
@@ -32,6 +33,8 @@ import {
 } from 'features/core/components';
 import { getEmployeePageCount, UpsertEmployeePages } from '../components';
 
+dayjs.extend(customParseFormat);
+
 type EmployeeFormData =
   Omit<Employee, 'id' | 'hireDate' | 'department' | 'jobTitle' | 'salary' | 'personalInfo'>
   & Omit<PersonalInfo, 'birthDate' | 'picture' | 'phones' | 'emails'>
@@ -47,44 +50,23 @@ type EmployeeFormData =
     picture?: string;
   }
 
-// const defaultValues: EmployeeFormData = {
-//   hireDate: dayjs().toDate(),
-//   department: '',
-//   jobTitle: '',
-//   // Personal info
-//   firstName: '',
-//   lastName: '',
-//   middleInitial: '',
-//   gender: Gender.FEMALE,
-//   birthDate: dayjs(`${dayjs().year()}-01-01`)
-//     .subtract(18, 'year')
-//     .toDate(),
-//   currentAddress: '',
-//   homeAddress: '',
-//   phones: [],
-//   emails: [],
-//   picture: '',
-//   isActive: true
-// };
-
 const defaultValues: EmployeeFormData = {
   hireDate: dayjs().toDate(),
-  department: '96AXvOeRZXkEoDCbuhWq',
-  jobTitle: '1ipOZbKnyRjYMIDQNwjS',
+  department: '',
+  jobTitle: '',
   // Personal info
-  firstName: 'Erin',
-  lastName: 'Nire',
-  middleInitial: 'A',
+  firstName: '',
+  lastName: '',
+  middleInitial: '',
   gender: Gender.FEMALE,
   birthDate: dayjs(`${dayjs().year()}-01-01`)
     .subtract(18, 'year')
     .toDate(),
-  currentAddress: 'Iloilo City',
-  homeAddress: 'Not Iloilo City',
-  phones: [{ value: '09219490071' }],
-  emails: [{ value: 'erin_nire@gmail.com' }],
+  currentAddress: '',
+  homeAddress: '',
+  phones: [],
+  emails: [],
   picture: '',
-  salary: 11,
   isActive: true
 };
 
@@ -195,11 +177,11 @@ const UpsertEmployeeSceneComponent: FC = () => {
       salary,
       isActive,
       personalInfo
-    }: any = selectedEmployee; console.log(selectedEmployee);
+    }: any = selectedEmployee;
 
     const existingEmployee: EmployeeFormData = {
       id,
-      hireDate: dayjs(hireDate.date).toDate(),
+      hireDate: dayjs(hireDate.date, 'MMMM DD, YYYY').toDate(),
       department: department.departmentId,
       jobTitle: jobTitle.titleId,
       salary: salary.salary,
@@ -207,7 +189,7 @@ const UpsertEmployeeSceneComponent: FC = () => {
       lastName: personalInfo.lastName,
       middleInitial: personalInfo.middleInitial,
       gender: personalInfo.gender.toLowerCase(),
-      birthDate: dayjs(personalInfo.birthDate.date).toDate(),
+      birthDate: dayjs(personalInfo.birthDate.date, 'MMMM DD, YYYY').toDate(),
       currentAddress: personalInfo.currentAddress,
       homeAddress: personalInfo.homeAddress,
       phones: personalInfo.phones.map((phone: string) => ({ value: phone })),
@@ -220,7 +202,7 @@ const UpsertEmployeeSceneComponent: FC = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedEmployee]);
 
-  const handlePageSelected = ({ nativeEvent }: ViewPagerOnPageSelectedEvent) => {
+  const handlePageSelected = ({ nativeEvent }: PagerViewOnPageSelectedEvent) => {
     setCurrentPage(nativeEvent.position);
   };
 
