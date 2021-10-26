@@ -8,8 +8,10 @@ import { persistor, store } from 'store';
 import { HeaderContextProvider } from 'features/core/context';
 import { App } from './app';
 
-// TEMPO
-LogBox.ignoreLogs(['Setting a timer for a long period of time']);
+LogBox.ignoreLogs([
+  'Setting a timer for a long period of time',
+  'AsyncStorage has been extracted from react-native core'
+]);
 
 export const Root: FC = () => (
   <ReduxProvider store={store}>
