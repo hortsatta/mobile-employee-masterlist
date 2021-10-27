@@ -1,4 +1,4 @@
-![logo](https://raw.githubusercontent.com/hortsatta/mobile-employee-masterlist/master/android/app/src/main/res/mipmap-mdpi/ic_launcher.png)
+![logo](https://raw.githubusercontent.com/hortsatta/mobile-employee-masterlist/master/android/app/src/main/res/mipmap-mdpi/ic_launcher.png)\
 mobile-employee-masterlist
 ======================
 A mobile Android app for the [employee-masterlist](https://github.com/hortsatta/employee-masterlist#readme).
