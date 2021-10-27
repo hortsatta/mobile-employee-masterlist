@@ -1,14 +1,14 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useTheme } from 'react-native-paper';
+import { Divider, Modal, Surface, useTheme } from 'react-native-paper';
 
-import { appRoutes, darkColors, fontSizes } from 'config/core';
+import { appRoutes, darkColors, fonts, fontSizes } from 'config/core';
 import { AuthCredential, PaperTheme } from 'models';
 import { selectAuthLoading, selectIsUserSignedIn, signInStart } from 'store/auth';
-import { StageView, Text } from 'features/core/components';
+import { Button, StageView, Text } from 'features/core/components';
 import { SignInForm } from '../components';
 
 import VSvg from 'assets/svgs/v.svg';
@@ -20,6 +20,7 @@ export const AuthScene: FC = () => {
   const theme = useTheme();
   const authLoading = useSelector(selectAuthLoading);
   const isUserSignedIn = useSelector(selectIsUserSignedIn);
+  const [showHelp, setShowHelp] = useState(false);
 
   useEffect(() => {
     if (!isUserSignedIn || authLoading) { return; }
@@ -47,10 +48,40 @@ export const AuthScene: FC = () => {
             <Text style={styles.signInText}>
               You are not signed in.{'\n'}Sign in to gain full access.
             </Text>
+            <Button
+              style={styles.helpButton}
+              contentStyle={styles.helpButtonContent}
+              labelStyle={styles.helpButtonLabel}
+              onPress={() => setShowHelp(true)}
+            >
+              <Text style={styles.helpText}>Use the following credentials.</Text>
+            </Button>
             <SignInForm loading={authLoading} onSubmit={handleSubmit} />
           </KeyboardAwareScrollView>
         </View>
       </View>
+      <Modal
+        style={styles.helpModal(theme)}
+        visible={showHelp}
+        onDismiss={() => setShowHelp(false)}
+      >
+        <Surface style={styles.help}>
+          <Text style={styles.helpTitle}>Sign in using the following credentials.</Text>
+          <Text style={styles.helpCredentialsText1}>
+            un—<Text style={styles.helpCredentialsText2}>admin@gmail.com</Text>{'\n'}
+            pw—<Text style={styles.helpCredentialsText2}>adminqweasdzxc</Text>
+          </Text>
+          <Divider style={styles.helpDivider} />
+          <Text style={styles.helpCredentialsText1}>
+            un—<Text style={styles.helpCredentialsText2}>user1@gmail.com</Text>{'\n'}
+            pw—<Text style={styles.helpCredentialsText2}>user1qweasdzxc</Text>
+          </Text>
+          <Text style={styles.helpCredentialsText1}>
+            un—<Text style={styles.helpCredentialsText2}>user2@gmail.com</Text>{'\n'}
+            pw—<Text style={styles.helpCredentialsText2}>user2qweasdzxc</Text>
+          </Text>
+        </Surface>
+      </Modal>
     </StageView>
   );
 };
@@ -79,12 +110,51 @@ const styles = StyleSheet.create<any>({
   },
   scrollViewContentWrapper: (height: number) => ({
     alignSelf: 'center',
-    paddingTop: height * 0.08,
+    paddingTop: height * 0.06,
     width: 270
   }),
   signInText: {
-    marginBottom: 28,
     color: darkColors.text,
     fontSize: fontSizes.text
+  },
+  helpButton: {
+    marginBottom: 20
+  },
+  helpButtonContent: {
+    justifyContent: 'flex-start'
+  },
+  helpButtonLabel: {
+    marginLeft: 0
+  },
+  helpText: {
+    color: darkColors.text,
+    fontSize: fontSizes.text,
+    textDecorationLine: 'underline'
+  },
+  helpModal: ({ colors }: PaperTheme) => ({
+    backgroundColor: colors.background
+  }),
+  help: {
+    alignSelf: 'center',
+    paddingTop: 24,
+    paddingBottom: 16,
+    paddingHorizontal: 24,
+    width: 300,
+    borderRadius: 16
+  },
+  helpTitle: {
+    marginBottom:8,
+    fontSize: fontSizes.text
+  },
+  helpCredentialsText1: {
+    marginVertical: 8,
+    fontSize: fontSizes.text
+  },
+  helpCredentialsText2: {
+    fontFamily: fonts.medium.fontFamily,
+    fontSize: fontSizes.text
+  },
+  helpDivider: {
+    marginVertical: 8
   }
 });

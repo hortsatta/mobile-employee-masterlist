@@ -49,4 +49,4 @@ const fontSizes = {
   button: 15
 };
 
-export { fontAssets, fontConfig, fontSizes };
+export { fonts, fontAssets, fontConfig, fontSizes };
