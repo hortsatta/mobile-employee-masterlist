@@ -31,7 +31,9 @@ export const App: FC = () => {
   // Define final color mode for the app's theme;
   // Apply result to react-native-paper and react-navigation theme.
   const isDark = useMemo(() => (
-    (darkMode == null) ? colorScheme === 'dark' : darkMode
+    (darkMode == null)
+      ? !colorScheme || colorScheme === 'dark'
+      : darkMode
   ), [darkMode, colorScheme]);
 
   const paperTheme = useMemo(() => getPaperTheme(isDark), [isDark]);
