@@ -65,7 +65,7 @@ export const BottomSheetView: FC<Props> = ({
         </BottomSheet>
       </Portal>
       {show && <StatusBar
-        backgroundColor={darkMode ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.5)'}
+        backgroundColor={theme.colors.background}
         style={darkMode ? 'light' : 'dark'}
       />}
     </>
