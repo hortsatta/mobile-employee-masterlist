@@ -150,7 +150,7 @@ const UpsertEmployeeSceneComponent: FC = () => {
     setOptions({ title: 'Update Employee' });
     loadEmployeeToUpdate();
     setIsLastPage(true);
-    pagerViewRef.current?.setPage(0);
+    !isCompleted && pagerViewRef.current?.setPage(0);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedEmployee]);
 
@@ -219,7 +219,7 @@ const UpsertEmployeeSceneComponent: FC = () => {
         // Add artificial delay (debounce), and go
         // to last page of form,
         debounce(() => setIsCompleted(true));
-        pagerViewRef.current?.setPage(pageCount);
+        pagerViewRef.current?.setPage(pageCount - 1);
         setCurrentPage(pageCount);
         // Dispatch start of adding new employee
         // Temporarily create new employee to be stored locally only.
@@ -270,7 +270,6 @@ const UpsertEmployeeSceneComponent: FC = () => {
           <UpsertEmployeePages
             isUpdate={!!selectedEmployee}
             isCompleted={isCompleted}
-            onSkipPage={() => pagerViewRef.current?.setPage(currentPage + 1)}
           />
         </PagerView>
         {!isKeyboardVisible && <FabButton
