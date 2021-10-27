@@ -60,6 +60,7 @@ export const EmployeeListHeaderRight: FC<Props> = ({
               <Button
                 style={styles.cancelButton}
                 contentStyle={styles.cancelButtonWrapper}
+                labelStyle={styles.cancelButtonLabel}
                 mode='text'
                 color={theme.colors.primary}
                 onPress={onCancelBatchPress}
@@ -114,8 +115,10 @@ const styles = StyleSheet.create<any>({
     marginRight: 8
   },
   cancelButtonWrapper: {
-    paddingTop: 2,
     height: 30
+  },
+  cancelButtonLabel: {
+    marginTop: 3
   },
   cancelText: ({ colors, fonts }: PaperTheme) => ({
     color: colors.primary,
